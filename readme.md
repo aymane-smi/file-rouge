@@ -7,3 +7,7 @@
 
  - class:
     ![class](class.png)
+ - sequence:
+   - employee sequence
+
+    ![sequence 1](seq1.png)
