@@ -7,7 +7,13 @@
 
  - class:
     ![class](class.png)
+
  - sequence:
-   - employee sequence
+   
+   - creating an order by employee sequence
 
     ![sequence 1](seq1.png)
+
+   -  restaurant managing order sequence
+
+    ![sequence 2](seq2.png)
