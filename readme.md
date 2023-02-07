@@ -16,4 +16,4 @@
 
    -  restaurant managing order sequence
 
-    ![sequence 2](seq2.png)
+    ![sequence 2 ](seq2.png)
