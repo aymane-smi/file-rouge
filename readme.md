@@ -17,3 +17,7 @@
    -  restaurant managing order sequence
 
     ![sequence 2 ](seq2.png)
+
+   - administartor managing employee sequence
+
+    ![sequence 3](seq3.png)
