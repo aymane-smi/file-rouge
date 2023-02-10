@@ -18,6 +18,9 @@
 
     ![sequence 2 ](seq2.png)
 
-   - administartor managing employee sequence
+   - administartor managing employees sequence
 
     ![sequence 3](seq3.png)
+   - administrator manging restaurants sequence
+
+    ![sequence 4](seq4.png)
