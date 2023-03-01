@@ -1,5 +1,8 @@
 # RED Line
 
+## figma design
+
+https://www.figma.com/file/yr6O6dhRW6JiAJPBai5esa
 ## diagrams
 
  - use case:
