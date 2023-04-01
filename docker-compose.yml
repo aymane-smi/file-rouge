@@ -1,6 +1,12 @@
 version: '3.9'
 
 services:
+  nextjs:
+    build:
+      context: ./frontend
+      dockerfile: ../Dockerfile.frontend
+    ports:
+      - '3000:3000'
   kafka:
     image: wurstmeister/kafka
     ports:
@@ -19,6 +25,8 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: employee
+    volumes:
+      - employee:/var/lib/postgresql/data
 
   employee:
     build: 
@@ -45,7 +53,9 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: administrator
+      POSTGRES_DB: administrato
+    volumes:
+      - administrator:/var/lib/postgresql/data
 
   administrator:
     build: 
@@ -73,6 +83,8 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: restaurant
+    volumes:
+      - restaurant:/var/lib/postgresql/data
 
   restaurant:
     build: 
@@ -91,3 +103,7 @@ services:
     depends_on:
       - kafka
       - restaurant-db
+volumes:
+  employee:
+  restaurant:
+  administrator:
