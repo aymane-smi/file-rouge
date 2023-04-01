@@ -1,0 +1,93 @@
+version: '3.9'
+
+services:
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_CREATE_TOPICS: "topic1:1:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  employee-db:
+    image: postgres:12.0-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: employee
+
+  employee:
+    build: 
+      context: ./employee
+      dockerfile: ../Dockerfile
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+      DB_HOST: employee-db
+      DB_PORT: 5432
+      DB_DATABASE: employee
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+    depends_on:
+      - kafka
+      - employee-db
+    ports:
+      - "8001:8000"
+
+  administrator-db:
+    image: postgres:12.0-alpine
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: administrator
+
+  administrator:
+    build: 
+      context: ./administrator
+      dockerfile: ../Dockerfile
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+      DB_HOST: administrator-db
+      DB_PORT: 5433
+      DB_DATABASE: administrator
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+    ports:
+      - "8002:8000"
+    depends_on:
+      - kafka
+      - administrator-db
+
+  restaurant-db:
+    image: postgres:12.0-alpine
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: restaurant
+
+  restaurant:
+    build: 
+      context: ./restaurant
+      dockerfile: ../Dockerfile
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+      DB_HOST: restaurant
+      DB_PORT: 5432
+      DB_DATABASE: restaurant
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+    ports:
+      - "8003:8000"
+    depends_on:
+      - kafka
+      - restaurant-db
