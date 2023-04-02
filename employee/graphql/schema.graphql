@@ -22,12 +22,25 @@ type Query{
 
 type Mutation{
   createEmployee(input: EmployeeInput @spread): Employee! @create
+  deleteEmployeeById(id: ID!): Employee! @delete
+  editEmployeeByIdResolver(input: EmployeeEditInput @spread): Employee!
 }
 
 
 #create inputs
 
 input EmployeeInput{
+  first_name: String! @rules(apply: ["required", "filled"])
+  last_name: String! @rules(apply: ["required", "filled"])
+  email: String! @rules(apply: ["email"])
+  password: String! @rules(apply: ["required", "filled"])
+  year: Int! @rules(apply: ["required", "filled"])
+  class: String! @rules(apply: ["required", "filled"])
+  haveTicket: Boolean = false
+}
+
+input EmployeeEditInput{
+  id: ID!
   first_name: String! @rules(apply: ["required", "filled"])
   last_name: String! @rules(apply: ["required", "filled"])
   email: String! @rules(apply: ["email"])
