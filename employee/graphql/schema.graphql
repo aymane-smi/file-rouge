@@ -1,0 +1,38 @@
+type Employee{
+  id: ID!
+  first_name: String!
+  last_name: String!
+  email: String!
+  password: String!
+  year: Int!
+  class_name: String!
+  haveTicket: Boolean
+}
+
+#making queries
+
+type Query{
+  getEmployeeById(id: ID! @eq): Employee @find
+  getAllEmployee: [Employee]! @all
+  getEmployeeByYear(year: Int! @eq): [Employee]! @all
+  getEmployeeByClass(class: String! @eq): [Employee]! @all
+}
+
+#making mutations
+
+type Mutation{
+  createEmployee(input: EmployeeInput @spread): Employee! @create
+}
+
+
+#create inputs
+
+input EmployeeInput{
+  first_name: String!
+  last_name: String!
+  email: String!
+  password: String!
+  year: Int!
+  class: String!
+  haveTicket: Boolean = false
+}

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("password");
             $table->integer("year");
             $table->string("class");
+            $table->boolean("haveTicket");
             $table->timestamps();
         });
     }
