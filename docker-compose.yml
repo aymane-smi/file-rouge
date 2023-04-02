@@ -7,17 +7,17 @@ services:
       dockerfile: ../Dockerfile.frontend
     ports:
       - '3000:3000'
-  kafka:
-    image: wurstmeister/kafka
+  redis:
+    image: redis
     ports:
-      - "9092:9092"
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_CREATE_TOPICS: "topic1:1:1"
+      - "6379:6379"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    environment:
+    - REDIS_PASSWORD=redisPassword
 
-  employee-db:
+  employee_db:
     image: postgres:12.0-alpine
     ports:
       - '5432:5432'
@@ -32,21 +32,24 @@ services:
     build: 
       context: ./employee
       dockerfile: ../Dockerfile
+    volumes:
+      - ./employee:/var/www/html
     environment:
-      KAFKA_HOST: kafka
-      KAFKA_PORT: 9092
-      DB_HOST: employee-db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: redisPassword
+      DB_HOST: employee_db
       DB_PORT: 5432
       DB_DATABASE: employee
       DB_USERNAME: admin
       DB_PASSWORD: admin
     depends_on:
-      - kafka
-      - employee-db
+      - redis
+      - employee_db
     ports:
-      - "8001:8000"
+      - "8004:8000"
 
-  administrator-db:
+  administrator_db:
     image: postgres:12.0-alpine
     ports:
       - '5433:5432'
@@ -61,21 +64,24 @@ services:
     build: 
       context: ./administrator
       dockerfile: ../Dockerfile
+    volumes:
+      - ./administrator:/var/www/html
     environment:
-      KAFKA_HOST: kafka
-      KAFKA_PORT: 9092
-      DB_HOST: administrator-db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: redisPassword
+      DB_HOST: administrator_db
       DB_PORT: 5433
       DB_DATABASE: administrator
       DB_USERNAME: admin
       DB_PASSWORD: admin
     ports:
-      - "8002:8000"
+      - "8005:8000"
     depends_on:
-      - kafka
-      - administrator-db
+      - redis
+      - administrator_db
 
-  restaurant-db:
+  restaurant_db:
     image: postgres:12.0-alpine
     ports:
       - '5434:5432'
@@ -90,20 +96,24 @@ services:
     build: 
       context: ./restaurant
       dockerfile: ../Dockerfile
+    volumes:
+      - ./restaurant:/var/www/html
     environment:
-      KAFKA_HOST: kafka
-      KAFKA_PORT: 9092
-      DB_HOST: restaurant
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: redisPassword
+      DB_HOST: restaurant_db
       DB_PORT: 5432
       DB_DATABASE: restaurant
       DB_USERNAME: admin
       DB_PASSWORD: admin
     ports:
-      - "8003:8000"
+      - "8006:8000"
     depends_on:
-      - kafka
-      - restaurant-db
+      - redis
+      - restaurant_db
 volumes:
   employee:
   restaurant:
   administrator:
+  redis_data:
