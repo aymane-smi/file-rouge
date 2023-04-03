@@ -17,16 +17,15 @@ services:
     environment:
     - REDIS_PASSWORD=redisPassword
 
-  employee_db:
+  db:
     image: postgres:12.0-alpine
     ports:
       - '5432:5432'
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: employee
     volumes:
-      - employee:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
 
   employee:
     build: 
@@ -38,27 +37,16 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: redisPassword
-      DB_HOST: employee_db
+      DB_HOST: db
       DB_PORT: 5432
       DB_DATABASE: employee
       DB_USERNAME: admin
       DB_PASSWORD: admin
     depends_on:
       - redis
-      - employee_db
+      - db
     ports:
       - "8004:8000"
-
-  administrator_db:
-    image: postgres:12.0-alpine
-    ports:
-      - '5433:5432'
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: administrato
-    volumes:
-      - administrator:/var/lib/postgresql/data
 
   administrator:
     build: 
@@ -70,8 +58,8 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: redisPassword
-      DB_HOST: administrator_db
-      DB_PORT: 5433
+      DB_HOST: db
+      DB_PORT: 5432
       DB_DATABASE: administrator
       DB_USERNAME: admin
       DB_PASSWORD: admin
@@ -79,18 +67,7 @@ services:
       - "8005:8000"
     depends_on:
       - redis
-      - administrator_db
-
-  restaurant_db:
-    image: postgres:12.0-alpine
-    ports:
-      - '5434:5432'
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: restaurant
-    volumes:
-      - restaurant:/var/lib/postgresql/data
+      - db
 
   restaurant:
     build: 
@@ -102,7 +79,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: redisPassword
-      DB_HOST: restaurant_db
+      DB_HOST: db
       DB_PORT: 5432
       DB_DATABASE: restaurant
       DB_USERNAME: admin
@@ -111,7 +88,7 @@ services:
       - "8006:8000"
     depends_on:
       - redis
-      - restaurant_db
+      - db
   redis-commander:
     container_name: redis-commander
     hostname: redis-commander
@@ -133,3 +110,4 @@ volumes:
   restaurant:
   administrator:
   redis_data:
+  db:

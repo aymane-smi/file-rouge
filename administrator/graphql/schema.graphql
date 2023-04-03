@@ -1,0 +1,37 @@
+type Administrator{
+  id: ID!
+  first_name: String!
+  last_name: String!
+  email: String!
+  password: String!
+}
+
+#making queries
+
+type Query{
+  getAdministratorById(id: ID! @eq): Administrator @find 
+}
+
+#making mutations
+
+type Mutation{
+  editAdministratorByIdResolver(input: AdministratorEditInput @spread): Administrator!
+}
+
+
+#create inputs
+
+input AdministratorInput{
+  first_name: String! @rules(apply: ["required", "filled"])
+  last_name: String! @rules(apply: ["required", "filled"])
+  email: String! @rules(apply: ["email"])
+  password: String! @rules(apply: ["required", "filled"])
+}
+
+input AdministratorEditInput{
+  id: ID!
+  first_name: String! @rules(apply: ["required", "filled"])
+  last_name: String! @rules(apply: ["required", "filled"])
+  email: String! @rules(apply: ["email"])
+  password: String! @rules(apply: ["required", "filled"])
+}
