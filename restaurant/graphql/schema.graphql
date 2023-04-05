@@ -1,0 +1,26 @@
+type Restuarant{
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+  address: String!
+}
+
+type Query{
+  getRestaurantById(id: ID! @eq): Restaurant! @find
+  getAllRestaurant(): [Restaurant!] @getAllRestaurant
+}
+
+type Mutation{
+  editRestaurant(input: EditRestaurant @spread): Restaurant!
+}
+
+input EditRestaurant{
+  id: ID! @rules(apply: ["required", "filled"])
+  name: String! @rules(apply: ["required", "filled"])
+  email: String! @rules(apply: ["required", "filled", "email"])
+  password: String! @rules(apply: ["required", "filled"])
+  phone: String! @rules(apply: ["required", "filled"])
+  address: String! @rules(apply: ["required", "filled"])
+}
