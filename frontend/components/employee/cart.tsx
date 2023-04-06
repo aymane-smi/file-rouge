@@ -1,6 +1,6 @@
 export default function Cart(){
     return (
-        <div className="hidden absolute w-[400px] h-fit max-h-[400px] rounded-md shadow-md bg-white p-5 overflow-y-scroll">
+        <div className=" absolute w-[400px] h-fit max-h-[400px] rounded-md shadow-md bg-white p-5 overflow-y-scroll">
             <p className="text-[20px] font-bold">My orders</p>
             {[1,2,3,4,5].map((item)=>(
                 <div className="mt-3 flex justify-between items-center" key={"cart-"+item}>

@@ -7,6 +7,13 @@ type Restuarant{
   address: String!
 }
 
+type Menu{
+  id: ID!
+  image: String!
+  available: Boolean
+  restaurant: Restaurant! @belongsTo
+}
+
 type Query{
   getRestaurantById(id: ID! @eq): Restaurant! @find
   getAllRestaurant(): [Restaurant!] @getAllRestaurant
@@ -14,6 +21,7 @@ type Query{
 
 type Mutation{
   editRestaurant(input: EditRestaurant @spread): Restaurant!
+  editMenuStatus(id: ID! @eq, status: Boolean): Menu!
 }
 
 input EditRestaurant{

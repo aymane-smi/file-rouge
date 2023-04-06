@@ -14,7 +14,6 @@ final class EditAdministratorByIdResolver
     public function __invoke($_, array $args)
     {
         // TODO implement the resolver
-
         DB::table("employees")->where("id", $args["id"])->update($args);
         $tmp = administrator::find($args["id"]);
 
