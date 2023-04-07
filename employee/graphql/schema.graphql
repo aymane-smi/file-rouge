@@ -24,6 +24,7 @@ type Mutation{
   createEmployee(input: EmployeeInput @spread): Employee! @create
   deleteEmployeeById(id: ID!): Employee! @delete
   editEmployeeByIdResolver(input: EmployeeEditInput @spread): Employee!
+  makeOrder(input: OrderInput): String
 }
 
 
@@ -48,4 +49,11 @@ input EmployeeEditInput{
   year: Int! @rules(apply: ["required", "filled"])
   class: String! @rules(apply: ["required", "filled"])
   haveTicket: Boolean = false
+}
+
+input OrderInput{
+  employee_id: ID! @rules(apply: ["required", "filled"])
+  menu_id: ID! @rules(apply: ["required", "filled"])
+  qte: Int! @rules(apply: ["required", "filled"])
+  price: Int! @rules(apply: ["required", "filled"])
 }
