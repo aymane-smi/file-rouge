@@ -38,6 +38,7 @@ type Query {
     getDetailById(id: ID! @eq): MenuDetails!
         @find(model: "App\\Models\\menu_details")
     getAllOrders(id: ID! @eq): [Order]! @all(model: "App\\Models\\order")
+    RestaurantLogin(email: String!, password: String!): String!
 }
 
 type Mutation {
@@ -49,8 +50,8 @@ type Mutation {
         @create(model: "App\\Models\\menu")
     createMenuDetails(input: MenuDetailsInput @spread): MenuDetails!
         @create(model: "App\\Models\\menu_details")
-    createRestaurant(input: RestaurantInput @spread): Restaurant!
-        @create(model: "App\\Models\\restaurant")
+    # createRestaurant(input: RestaurantInput @spread): Restaurant!
+    #     @create(model: "App\\Models\\restaurant")
 }
 
 input EditRestaurant {
