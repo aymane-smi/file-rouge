@@ -1,59 +1,59 @@
-type Employee{
-  id: ID!
-  first_name: String!
-  last_name: String!
-  email: String!
-  password: String!
-  year: Int!
-  class: String!
-  haveTicket: Boolean
+type Employee @key(fields: "id") {
+    id: ID!
+    first_name: String!
+    last_name: String!
+    email: String!
+    password: String!
+    year: Int!
+    class: String!
+    haveTicket: Boolean
 }
 
 #making queries
 
-type Query{
-  getEmployeeById(id: ID! @eq): Employee @find
-  getAllEmployee: [Employee]! @all
-  getEmployeeByYear(year: Int! @eq): [Employee]! @all
-  getEmployeeByClass(class: String! @eq): [Employee]! @all
+type Query {
+    getEmployeeById(id: ID! @eq): Employee @find
+    getAllEmployee: [Employee]! @all
+    getEmployeeByYear(year: Int! @eq): [Employee]! @all
+    getEmployeeByClass(class: String! @eq): [Employee]! @all
 }
 
 #making mutations
 
-type Mutation{
-  createEmployee(input: EmployeeInput @spread): Employee! @create
-  deleteEmployeeById(id: ID!): Employee! @delete
-  editEmployeeByIdResolver(input: EmployeeEditInput @spread): Employee!
-  makeOrder(input: OrderInput): String
+type Mutation {
+    createEmployee(input: EmployeeInput @spread): Employee!
+        @create(model: "App\\Models\\employee")
+    deleteEmployeeById(id: ID!): Employee! @delete
+    EditEmployeeByIdResolver(input: EmployeeEditInput @spread): Employee!
+    makeOrder(input: OrderInput): String
 }
-
 
 #create inputs
 
-input EmployeeInput{
-  first_name: String! @rules(apply: ["required", "filled"])
-  last_name: String! @rules(apply: ["required", "filled"])
-  email: String! @rules(apply: ["email"])
-  password: String! @rules(apply: ["required", "filled"])
-  year: Int! @rules(apply: ["required", "filled"])
-  class: String! @rules(apply: ["required", "filled"])
-  haveTicket: Boolean = false
+input EmployeeInput {
+    first_name: String! @rules(apply: ["required", "filled"])
+    last_name: String! @rules(apply: ["required", "filled"])
+    email: String! @rules(apply: ["email"])
+    password: String! @rules(apply: ["required", "filled"])
+    year: Int! @rules(apply: ["required", "filled"])
+    class: String! @rules(apply: ["required", "filled"])
+    haveTicket: Boolean = false
 }
 
-input EmployeeEditInput{
-  id: ID!
-  first_name: String! @rules(apply: ["required", "filled"])
-  last_name: String! @rules(apply: ["required", "filled"])
-  email: String! @rules(apply: ["email"])
-  password: String! @rules(apply: ["required", "filled"])
-  year: Int! @rules(apply: ["required", "filled"])
-  class: String! @rules(apply: ["required", "filled"])
-  haveTicket: Boolean = false
+input EmployeeEditInput {
+    id: ID!
+    first_name: String! @rules(apply: ["required", "filled"])
+    last_name: String! @rules(apply: ["required", "filled"])
+    email: String! @rules(apply: ["email"])
+    password: String! @rules(apply: ["required", "filled"])
+    year: Int! @rules(apply: ["required", "filled"])
+    class: String! @rules(apply: ["required", "filled"])
+    haveTicket: Boolean = false
 }
 
-input OrderInput{
-  employee_id: ID! @rules(apply: ["required", "filled"])
-  menu_id: ID! @rules(apply: ["required", "filled"])
-  qte: Int! @rules(apply: ["required", "filled"])
-  price: Int! @rules(apply: ["required", "filled"])
+input OrderInput {
+    employee_id: ID! @rules(apply: ["required", "filled"])
+    menu_id: ID! @rules(apply: ["required", "filled"])
+    qte: Int! @rules(apply: ["required", "filled"])
+    price: Int! @rules(apply: ["required", "filled"])
 }

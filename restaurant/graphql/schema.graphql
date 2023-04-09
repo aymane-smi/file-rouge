@@ -1,34 +1,50 @@
-type Restuarant{
-  id: ID!
-  name: String!
-  email: String!
-  password: String!
-  phone: String!
-  address: String!
+type Restaurant @key(fields: "id") {
+    id: ID!
+    name: String!
+    email: String!
+    password: String!
+    phone: String!
+    address: String!
 }
 
-type Menu{
-  id: ID!
-  image: String!
-  available: Boolean
-  restaurant: Restaurant! @belongsTo
+type Menu @key(fields: "id") {
+    id: ID!
+    image: String!
+    available: Boolean
+    restaurant: Restaurant! @belongsTo
 }
 
-type Query{
-  getRestaurantById(id: ID! @eq): Restaurant! @find
-  getAllRestaurant(): [Restaurant!] @getAllRestaurant
+type Query {
+    getRestaurantById(id: ID! @eq): Restaurant! @find
+    getAllRestaurant: [Restaurant!] @all
 }
 
-type Mutation{
-  editRestaurant(input: EditRestaurant @spread): Restaurant!
-  editMenuStatus(id: ID! @eq, status: Boolean): Menu!
+type Mutation {
+    #editRestaurant(input: EditRestaurant @spread): Restaurant!
+    #editMenuStatus(id: ID! @eq, status: Boolean): Menu!
+    createRestaurant(input: RestaurantInput @spread): Restaurant!
+        @create(model: "App\\Models\\restaurant")
+    #createMenu(input: MenuInput @spread): Menu!
+    #    @create(model: "App\\Models\\menu")
 }
 
-input EditRestaurant{
-  id: ID! @rules(apply: ["required", "filled"])
-  name: String! @rules(apply: ["required", "filled"])
-  email: String! @rules(apply: ["required", "filled", "email"])
-  password: String! @rules(apply: ["required", "filled"])
-  phone: String! @rules(apply: ["required", "filled"])
-  address: String! @rules(apply: ["required", "filled"])
+input EditRestaurant {
+    id: ID! @rules(apply: ["required", "filled"])
+    name: String! @rules(apply: ["required", "filled"])
+    email: String! @rules(apply: ["required", "filled", "email"])
+    password: String! @rules(apply: ["required", "filled"])
+    phone: String! @rules(apply: ["required", "filled"])
+    address: String! @rules(apply: ["required", "filled"])
+}
+
+input RestaurantInput {
+    name: String! @rules(apply: ["required", "filled"])
+    email: String! @rules(apply: ["required", "filled", "email"])
+    password: String! @rules(apply: ["required", "filled"])
+    phone: String! @rules(apply: ["required", "filled"])
+    address: String! @rules(apply: ["required", "filled"])
+}
+
+type _Service {
+    sdl: String
 }

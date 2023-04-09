@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("employee_id");
             $table->unsignedBigInteger("menu_id");
-            $table->unsignedBigInteger("restaurant_id");
             $table->integer("current_price");
             $table->integer("quantity");
-            $table->foreign("menu_id")->on("menu")->references("id");
-            $table->foreign("restaurant_id")->on("restaurant")->references("id");
+            $table->foreign("menu_id")->on("menus")->references("id");
             $table->timestamps();
         });
     }

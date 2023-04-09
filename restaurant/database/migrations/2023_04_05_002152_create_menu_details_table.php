@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger("menu_id");
             $table->integer("price");
             $table->string("portion");
-            $table->foreign("menu_id")->on("menu")->references("id");
+            $table->foreign("menu_id")->on("menus")->references("id");
             $table->timestamps();
         });
     }
