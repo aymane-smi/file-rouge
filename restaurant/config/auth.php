@@ -42,7 +42,7 @@ return [
         ],
         'restaurant' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'restaurant_auth',
         ],
     ],
 
@@ -69,7 +69,7 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'restaurant' => [
+        'restaurant_auth' => [
             'driver' => 'eloquent',
             'model' => App\Models\restaurant::class,
         ],

@@ -5,6 +5,7 @@ const gateway = new ApolloGateway({
   serviceList: [
     { name: "employee", url: "http://localhost:9000/graphql" },
     { name: "restaurant", url: "http://localhost:9002/graphql" },
+    { name: "administrator", url: "http://localhost:9001/graphql" },
     // other subgraphs can be included here
   ],
 });
