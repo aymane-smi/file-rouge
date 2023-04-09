@@ -33,7 +33,7 @@ type Order @key(fields: "id") {
 
 type Query {
     getRestaurantById(id: ID! @eq): Restaurant! @find
-    getAllRestaurant: [Restaurant!] @all
+    getAllRestaurant: [Restaurant!] @all(model: "App\\Models\\restaurant")
     getMenu(id: ID! @eq): Menu! @find(model: "App\\Models\\menu")
     getDetailById(id: ID! @eq): MenuDetails!
         @find(model: "App\\Models\\menu_details")
