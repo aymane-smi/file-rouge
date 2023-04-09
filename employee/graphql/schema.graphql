@@ -16,6 +16,7 @@ type Query {
     getAllEmployee: [Employee]! @all
     getEmployeeByYear(year: Int! @eq): [Employee]! @all
     getEmployeeByClass(class: String! @eq): [Employee]! @all
+    Login(email: String!, password: String!): String!
 }
 
 #making mutations
