@@ -8,3 +8,9 @@ export const getAllRestaurant = gql`
         }
     }
 `;
+
+export const loginEmployee = gql`
+query($email: String!, $password: String!){
+    Login(email: $email, password:$password)
+}
+`;

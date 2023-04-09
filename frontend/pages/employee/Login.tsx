@@ -3,22 +3,16 @@ import Image from "next/image";
 import { useState } from "react";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { loginEmployee } from "../../utils/gql";
+import { login } from "../../utils/types";
 
 export default function Login(){
     const {push} = useRouter();
-    const [inputs, setInput] = useState<{
-        email: string,
-        password: string
-    }>({
+    const [inputs, setInput] = useState<login>({
         email: "",
         password: "",
     });
-    const query = gql`
-            query($email: String!, $password: String!){
-                Login(email: $email, password:$password)
-            }
-        `;
-    const [Login, {data, error, loading}] = useLazyQuery(query, {
+    const [Login, {data, error, loading}] = useLazyQuery(loginEmployee, {
         variables: {
             email:String, password:String
         }
