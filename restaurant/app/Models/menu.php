@@ -9,7 +9,13 @@ class menu extends Model
 {
     use HasFactory;
 
-    public function restaurant(){
-        $this->belongsTo(restaurant::class);
+    public function restaurant()
+    {
+        return $this->belongsTo(restaurant::class);
+    }
+
+    public function details()
+    {
+        return $this->hasMany(menu_details::class);
     }
 }

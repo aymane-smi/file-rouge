@@ -5,6 +5,7 @@ type Restaurant @key(fields: "id") {
     password: String!
     phone: String!
     address: String!
+    menus: [Menu]! @hasMany
 }
 
 type Menu @key(fields: "id") {
@@ -12,20 +13,44 @@ type Menu @key(fields: "id") {
     image: String!
     available: Boolean
     restaurant: Restaurant! @belongsTo
+    details: [MenuDetails]! @hasMany
+}
+
+type MenuDetails @key(fields: "id") {
+    id: ID!
+    menu_id: Int!
+    price: Int!
+    portion: Int!
+}
+
+type Order @key(fields: "id") {
+    id: ID!
+    employee_id: ID!
+    menu_id: ID!
+    current_price: Int!
+    quantity: Int!
 }
 
 type Query {
     getRestaurantById(id: ID! @eq): Restaurant! @find
     getAllRestaurant: [Restaurant!] @all
+    getMenu(id: ID! @eq): Menu! @find(model: "App\\Models\\menu")
+    getDetailById(id: ID! @eq): MenuDetails!
+        @find(model: "App\\Models\\menu_details")
+    getAllOrders(id: ID! @eq): [Order]! @all(model: "App\\Models\\order")
 }
 
 type Mutation {
-    #editRestaurant(input: EditRestaurant @spread): Restaurant!
-    #editMenuStatus(id: ID! @eq, status: Boolean): Menu!
+    editRestaurant(input: EditRestaurant @spread): Restaurant!
+    editMenuStatus(id: ID! @eq, status: Boolean): Menu!
     createRestaurant(input: RestaurantInput @spread): Restaurant!
         @create(model: "App\\Models\\restaurant")
-    #createMenu(input: MenuInput @spread): Menu!
-    #    @create(model: "App\\Models\\menu")
+    createMenu(input: MenuInput @spread): Menu!
+        @create(model: "App\\Models\\menu")
+    createMenuDetails(input: MenuDetailsInput @spread): MenuDetails!
+        @create(model: "App\\Models\\menu_details")
+    createRestaurant(input: RestaurantInput @spread): Restaurant!
+        @create(model: "App\\Models\\restaurant")
 }
 
 input EditRestaurant {
@@ -43,6 +68,19 @@ input RestaurantInput {
     password: String! @rules(apply: ["required", "filled"])
     phone: String! @rules(apply: ["required", "filled"])
     address: String! @rules(apply: ["required", "filled"])
+}
+
+input MenuInput {
+    name: String!
+    restaurant_id: Int!
+    image: String!
+    available: Boolean = true
+}
+
+input MenuDetailsInput {
+    menu_id: Int!
+    price: Int!
+    portion: Int!
 }
 
 type _Service {
