@@ -8,7 +8,6 @@ import { getAllRestaurant } from "../../utils/gql";
 
 export default function index(){
     const {data, error, loading} = useQuery(getAllRestaurant);
-    if(data)
     return (
         <>
             <Head>

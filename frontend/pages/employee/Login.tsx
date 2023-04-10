@@ -26,8 +26,10 @@ export default function Login(){
     const HandleForm = async(e)=>{
         e.preventDefault();
         Login({ variables: {email: inputs.email, password: inputs.password}});
-        if(data)
-         push("/employee");
+        if(data){
+            console.log(data);
+            //push("/employee");
+        }
     }
     const src = "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=847&q=80";
     return (

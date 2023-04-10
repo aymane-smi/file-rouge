@@ -17,12 +17,15 @@ final class Login
         // TODO implement the resolver
 
         $employee = employee::where("email", $args["email"])->first();
-
         if (!$employee || !Hash::check($args["password"], $employee->password))
             throw ValidationException::withMessages([
                 "message" => "invalid email or password",
             ]);
         else
-            return $employee->createToken($args["email"])->plainTextToken;
+            return [
+                "employee" => $employee,
+                "token" => $employee->createToken($args["email"])->plainTextToken
+            ];
+        //return $employee;
     }
 }

@@ -9,6 +9,11 @@ type Employee @key(fields: "id") {
     haveTicket: Boolean
 }
 
+type LoginInfo {
+    employee: Employee
+    token: String!
+}
+
 #making queries
 
 type Query {
@@ -16,7 +21,7 @@ type Query {
     getAllEmployee: [Employee]! @all
     getEmployeeByYear(year: Int! @eq): [Employee]! @all
     getEmployeeByClass(class: String! @eq): [Employee]! @all
-    Login(email: String!, password: String!): String!
+    Login(email: String!, password: String!): LoginInfo
 }
 
 #making mutations
