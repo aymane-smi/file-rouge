@@ -1,10 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { loginEmployee } from "../../utils/gql";
 import { login } from "../../utils/types";
+import { Loading } from "../../components/utils/Loading";
 
 export default function Login(){
     const {push} = useRouter();
@@ -17,6 +18,15 @@ export default function Login(){
             email:String, password:String
         }
     });
+
+    useEffect(()=>{
+        if(data){
+            localStorage.setItem("user", JSON.stringify(data?.Login?.employee));
+            localStorage.setItem("token", data?.Login?.token);
+            localStorage.setItem("role", "employee");
+            push("/employee");
+        }
+    }, [data]);
     const handlePassword = (e)=>{
         setInput((old)=>({...old, password: e.target.value}));
     }
@@ -26,14 +36,11 @@ export default function Login(){
     const HandleForm = async(e)=>{
         e.preventDefault();
         Login({ variables: {email: inputs.email, password: inputs.password}});
-        if(data){
-            console.log(data);
-            //push("/employee");
-        }
     }
     const src = "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=847&q=80";
     return (
         <>
+            {(loading && !error) && <Loading /> }
             <Head>
                 <title>employee login</title>
             </Head>

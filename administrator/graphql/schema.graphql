@@ -6,11 +6,15 @@ type Administrator @key(fields: "id") {
     password: String!
 }
 
+type AdminInfo {
+    administrator: Administrator!
+    token: String!
+}
 #making queries
 
 type Query {
     getAdministratorById(id: ID! @eq): Administrator @find
-    AdminLogin(email: String!, password: String!): String!
+    AdminLogin(email: String!, password: String!): AdminInfo!
 }
 
 #making mutations
@@ -19,6 +23,7 @@ type Mutation {
     editAdministratorByIdResolver(
         input: AdministratorEditInput @spread
     ): Administrator!
+    addAdministrator(input: AdministratorInput @spread): Administrator! @create(model: "App\\Models\\administrator")
 }
 
 #create inputs

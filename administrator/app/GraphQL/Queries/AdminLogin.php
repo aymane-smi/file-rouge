@@ -23,6 +23,9 @@ final class AdminLogin
                 "message" => "invalid email or password",
             ]);
         else
-            return $administrator->createToken($args["email"])->plainTextToken;
+            return [
+                "administrator" => $administrator,
+                "token" => $administrator->createToken($args["email"])->plainTextToken,
+            ];
     }
 }
