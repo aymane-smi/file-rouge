@@ -65,7 +65,7 @@ export const AddRes = ({toggle})=>{
         }));
     };
 
-    return (<div className="absolute w-screen h-screen bg-transparent/80 flex justify-center items-center">
+    return (<div className="absolute w-screen h-screen bg-transparent/80 flex justify-center items-center z-[99999]">
         {loading ? <Spinner aria-label="Spinner button example" color="info"/> : <div className="bg-white rounded-md p-4 w-[350px] h-[500px] overflow-y-scroll">
             <div className="w-full flex justify-end items-center">
                 <GrClose size={20} color="gray" onClick={()=>toggle()}/>

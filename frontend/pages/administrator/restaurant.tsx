@@ -31,7 +31,7 @@ export default function restaurant(){
             <SideBar />
             <div className={["max-h-screen pb-3", "overflow-y-scroll", styles.width].join(" ")}>
                 <HeaderRes toggle={toggle}/>
-                <div>
+                <div className="z-0">
                     <Table>
                         <Table.Head>
                             <Table.HeadCell>

@@ -1,3 +1,5 @@
+scalar Upload
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
 type Administrator @key(fields: "id") {
     id: ID!
     first_name: String!
@@ -23,7 +25,9 @@ type Mutation {
     editAdministratorByIdResolver(
         input: AdministratorEditInput @spread
     ): Administrator!
-    addAdministrator(input: AdministratorInput @spread): Administrator! @create(model: "App\\Models\\administrator")
+    addAdministrator(input: AdministratorInput @spread): Administrator!
+        @create(model: "App\\Models\\administrator")
+    addComplaint(input: Complaint): String!
 }
 
 #create inputs
@@ -41,4 +45,11 @@ input AdministratorEditInput {
     last_name: String! @rules(apply: ["required", "filled"])
     email: String! @rules(apply: ["email"])
     password: String! @rules(apply: ["required", "filled"])
+}
+
+input Complaint {
+    first_name: String
+    last_name: String
+    description: String
+    image: Upload
 }
