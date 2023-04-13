@@ -1,4 +1,4 @@
-stype Employee @key(fields: "id") {
+type Employee @key(fields: "id") {
     id: ID!
     first_name: String!
     last_name: String!

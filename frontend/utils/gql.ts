@@ -36,6 +36,21 @@ export const loginAdmin = gql`
 }
 `;
 
+export const loginRestaurant = gql`
+    query($email: String!, $password: String!){
+        RestaurantLogin(email: $email, password:$password){
+            restaurant{
+                id
+                email
+                phone
+                address
+                name
+            }
+            token
+    }
+}
+`;
+
 export const addRestaurant = gql`
     mutation CreateRestaurant($input: RestaurantInput) {
         createRestaurant(input: $input) {
@@ -53,5 +68,11 @@ export const getAllRestaurants = gql`
             phone
             address
         }
+    }
+`;
+
+export const addComplaint = gql`
+    mutation AddComplaint($file: Upload) {
+        AddComplaint(file: $file)
     }
 `;

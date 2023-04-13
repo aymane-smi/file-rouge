@@ -23,6 +23,9 @@ final class RestaurantLogin
                 "message" => "invalid email or password",
             ]);
         else
-            return $restaurant->createToken($args["email"])->plainTextToken;
+            return [
+                "restaurant" => $restaurant,
+                "token" => $restaurant->createToken($args["email"])->plainTextToken,
+            ];
     }
 }

@@ -38,7 +38,7 @@ type Query {
     getDetailById(id: ID! @eq): MenuDetails!
         @find(model: "App\\Models\\menu_details")
     getAllOrders(id: ID! @eq): [Order]! @all(model: "App\\Models\\order")
-    RestaurantLogin(email: String!, password: String!): String!
+    RestaurantLogin(email: String!, password: String!): RestaurantInfo!
 }
 
 type Mutation {
@@ -86,4 +86,9 @@ input MenuDetailsInput {
 
 type _Service {
     sdl: String
+}
+
+type RestaurantInfo {
+    restaurant: Restaurant!
+    token: String!
 }

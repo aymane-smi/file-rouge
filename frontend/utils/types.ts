@@ -15,3 +15,8 @@ export type addRestaurant = {
     name: string,
     phone: string,
 }
+
+export type claim = {
+    description: string,
+    image?: File | null,
+}

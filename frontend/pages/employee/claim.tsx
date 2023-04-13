@@ -3,15 +3,60 @@ import SideBar from "../../components/employee/sideBar";
 import styles from "../../styles/employee_index.module.css";
 import { AiFillBell, AiOutlineDown } from "react-icons/ai";
 import { BsFillImageFill } from "react-icons/bs";
+import { useMutation } from "@apollo/client";
+import { claim as type } from "../../utils/types";
+import { useState } from "react";
+import { addComplaint as gql} from "../../utils/gql";
+import { Loading } from "../../components/utils/Loading";
 export default function claim(){
+    const [Mutation, {loading, data, error}] = useMutation(gql);
+    const [claim, setClaim] = useState<type>({
+        description: "",
+        image: null,
+    });
+
+    const handleInput = async(e)=>{
+        if(!e.target.files)
+            setClaim((old)=>({...old, [e.target.name]: e.target.value}));
+        else{
+            let tmp = (e.target.files[0]);
+            await setClaim((old)=>({...old, image: tmp}));
+        }
+    };
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        if(!claim.image)
+            Mutation({
+                variables: {
+                    input: {
+                        description: claim.description,
+                        first_name: "aymane",
+                        last_name: "belassiria",
+                    }
+                }
+            });
+        else{
+            Mutation({
+                variables: {
+                    // input: {
+                    //     description: claim.description,
+                    //     first_name: "aymane",
+                    //     last_name: "belassiria",
+                    // },
+                    file: claim.image,
+                }
+            });
+        }
+    }
     return (<>
+            {loading && <Loading />}
             <Head>
                 <title>claims</title>
             </Head>
             <main className="flex w-screen">
                 <SideBar />
                 <div className={["h-screen overflow-y-scroll flex", styles.width].join(" ")}>
-                <form className="h-screen w-[50%] p-10">
+                <form className="h-screen w-[50%] p-10" onSubmit={handleSubmit}>
                         {/* <div className="flex w-full gap-5 justify-end items-center">
                             <AiFillBell size={20}/>
                             <AiOutlineDown size={20}/>
@@ -23,14 +68,14 @@ export default function claim(){
                                     Problem
                                     <span className="text-red-500 font-bold">*</span>
                                 </label>
-                                <textarea name="problem" className="w-[300px] h-[150px] outline-none border-[2px] rounded-md"></textarea>
+                                <textarea onChange={handleInput} name="description" className="w-[300px] h-[150px] outline-none border-[2px] rounded-md"></textarea>
                             </div>
                             <div className="w-[300px] p-4 rounded-md text-white bg-blue-500 flex justify-center items-center">
                                 <label htmlFor="image" className="flex flex-col justify-center items-center">
                                     <BsFillImageFill size={30}/>
                                     <p className="font-bold">upload image for this complaint</p>
                                 </label>
-                                <input type="file" id="image" name="complaint_image" className="hidden" />
+                                <input onChange={handleInput} type="file" id="image" name="image" className="hidden" />
                             </div>
                             <button className="p-2 text-white rounded-md bg-black font-bold w-[300px] text-[16px] mt-4">send</button>
                         </div>
