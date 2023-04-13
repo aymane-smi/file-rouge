@@ -1,3 +1,10 @@
+import Head from "next/head";
+
 export default function index(){
-    return (<>restaurant</>)
+    return (<>
+        <Head>
+            <title>Restaurant Dashboard</title>
+        </Head>
+        <main></main>
+    </>)
 }
