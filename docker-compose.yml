@@ -28,7 +28,20 @@ services:
       POSTGRES_PASSWORD: admin
     volumes:
       - db:/var/lib/postgresql/data
-
+  file:
+    build: 
+      context: ./file
+      dockerfile: ../Dockerfile
+    volumes:
+      - ./file:/var/www/html
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: redisPassword
+    depends_on:
+      - redis
+    ports:
+      - "9003:8000"
   employee:
     build: 
       context: ./employee

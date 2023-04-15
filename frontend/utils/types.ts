@@ -19,4 +19,10 @@ export type addRestaurant = {
 export type claim = {
     description: string,
     image?: File | null,
+};
+
+export type addMenu = {
+    name: String,
+    image?: File | null,
+    available: boolean,
 }

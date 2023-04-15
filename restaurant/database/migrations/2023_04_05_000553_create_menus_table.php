@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger("restaurant_id");
             $table->string("image");
             $table->boolean("available")->default(true);
+            $table->string("name");
             $table->foreign("restaurant_id")->on("restaurants")->references("id")->onDelete("cascade");
             $table->timestamps();
         });
