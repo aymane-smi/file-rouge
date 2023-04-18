@@ -17,6 +17,6 @@ class menu extends Controller
         $name = now()->timestamp . "_" . $req->file("menu")->getClientOriginalName();
         $req->file("menu")->storeAs('public/menu', $name);
 
-        return Response()->json(["message" => "image uploaded " . $name], 200);
+        return Response()->json(["message" => $name], 200);
     }
 }

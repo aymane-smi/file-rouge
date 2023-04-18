@@ -6,8 +6,10 @@ import { BsFillImageFill } from "react-icons/bs";
 import { useMutation } from "@apollo/client";
 import { claim as type } from "../../utils/types";
 import { useState } from "react";
-import { addComplaint as gql} from "../../utils/gql";
+import { addComplain as gql} from "../../utils/gql";
 import { Loading } from "../../components/utils/Loading";
+import axios from "axios";
+import { classicNameResolver } from "typescript";
 export default function claim(){
     const [Mutation, {loading, data, error}] = useMutation(gql);
     const [claim, setClaim] = useState<type>({
@@ -23,27 +25,34 @@ export default function claim(){
             await setClaim((old)=>({...old, image: tmp}));
         }
     };
-    const handleSubmit = (e)=>{
+    const handleSubmit = async(e)=>{
         e.preventDefault();
-        if(!claim.image)
+        if(claim.image){
+            const {data} = await axios.post("http://localhost:9003/api/uploadClaim", {
+                claim: claim.image,
+            }, { headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log(data);
             Mutation({
                 variables: {
                     input: {
                         description: claim.description,
                         first_name: "aymane",
                         last_name: "belassiria",
+                        image: data.message,
                     }
                 }
             });
-        else{
+        }else{
             Mutation({
                 variables: {
-                    // input: {
-                    //     description: claim.description,
-                    //     first_name: "aymane",
-                    //     last_name: "belassiria",
-                    // },
-                    file: claim.image,
+                    input: {
+                        description: claim.description,
+                        first_name: "aymane",
+                        last_name: "belassiria",
+                    },
                 }
             });
         }

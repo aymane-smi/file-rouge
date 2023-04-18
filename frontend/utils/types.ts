@@ -25,4 +25,24 @@ export type addMenu = {
     name: String,
     image?: File | null,
     available: boolean,
+    category: number,
+}
+
+
+export type Menus = {
+    image: String,
+    name: String,
+    id: number
+}[];
+
+export type Details = {
+    price: [number],
+    portion: [string],
+}
+
+export type Menu = {
+    id: number,
+    name: string,
+    available: boolean,
+    category: number
 }

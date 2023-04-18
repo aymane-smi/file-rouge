@@ -71,8 +71,106 @@ export const getAllRestaurants = gql`
     }
 `;
 
-export const addComplaint = gql`
-    mutation AddComplaint($file: Upload) {
-        AddComplaint(file: $file)
+export const addComplain = gql`
+    mutation Mutation($input: Complain) {
+        AddComplain(input: $input)
     }
+`;
+
+export const addCategory = gql`
+    mutation Mutation($name: String!, $emoji: String!, $restaurant_id: ID!) {
+    createCategory(name: $name, emoji: $emoji, restaurant_id: $restaurant_id) {
+        id
+        name
+        emoji
+    }
+}
+`;
+
+export const getAllCategoriesForRestaurant = gql`
+query ($id: ID!) {
+    getRestaurantById(id: $id) {
+        categories {
+            id
+            name
+        }
+  }
+}
+`;
+
+export const getRestaurantMenus = gql`
+query GetRestaurantById($id: ID!) {
+  getRestaurantById(id: $id) {
+    menus {
+      id
+      image
+      name
+      available
+    }
+  }
+}
+`;
+
+
+export const addMenu = gql`
+mutation MyMutation($input: MenuInput!){
+  createMenu(input: $input) {
+    id
+    image
+    name
+    available
+  }
+}
+`;
+
+
+export const addMenuDetails = gql`
+    mutation Mutation($input: MenuDetailsInput) {
+    createMenuDetails(input: $input)
+    }
+`;
+
+export const getMenuEdit = gql`
+    query MyQuery {
+    getMenu(id: 5) {
+        id
+        name
+        available
+        category_id
+    }
+}
+`;
+
+export const editMenu = gql`
+mutation MyMutation($input: EditMenuInput!){
+  editMenu(input:$input) {
+    id
+    name
+    available
+    category_id
+  }
+}
+`;
+
+export const getRestaurantById = gql`
+query MyQuery($id: ID!){
+  getRestaurantById(id: $id){
+    id
+    name
+    categories{
+        emoji
+        id
+        name
+        menus{
+            available
+            name
+            image
+            details{
+                portion
+                price
+            }
+        }
+    }
+  }
+}
 `;

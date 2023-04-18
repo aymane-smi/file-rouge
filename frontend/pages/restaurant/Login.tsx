@@ -42,11 +42,11 @@ export default function Login(){
         <>
             {(loading && !error) && <Loading /> }
             <Head>
-                <title>employee login</title>
+                <title>restaurant login</title>
             </Head>
             <div className="w-screen h-screen flex">
                 <div className="h-screen w-[50vw] flex flex-col justify-center items-center gap-5">
-                    <p className="font-bold text-[25px]">Welcome to The Employee Login page</p>
+                    <p className="font-bold text-[25px]">Welcome to The Restaurant Login page</p>
                     <form className="flex flex-col gap-3" onSubmit={HandleForm}>
                         <label htmlFor="email" className="text-gray-700">Email</label>
                         <input onChange={(e)=>handleEmail(e)} placeholder="email" type="email" id="email" name="email" className="p-2 border-2 rounded-md w-[300px]"/>

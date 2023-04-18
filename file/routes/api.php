@@ -23,6 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post("/uploadCalim", [claim::class, "index"]);
+Route::post("/uploadClaim", [claim::class, "index"]);
 
 Route::post("/uploadMenu", [menu::class, "index"]);

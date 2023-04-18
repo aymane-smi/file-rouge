@@ -17,6 +17,6 @@ class claim extends Controller
         $name = now()->timestamp . "_" . $req->file("claim")->getClientOriginalName();
         $req->file("claim")->storeAs('public/complain', $name);
 
-        return Response()->json(["message" => "image uploaded " . $name], 200);
+        return Response()->json(["message" => $name], 200);
     }
 }

@@ -1,25 +1,28 @@
 import { GrClose } from "react-icons/gr";
 import {useState, useEffect} from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { addMenu, addRestaurant, getAllCategoriesForRestaurant } from "../../utils/gql";
-import { addMenu as type } from "../../utils/types";
+import { editMenu, getAllCategoriesForRestaurant, getMenuEdit } from "../../utils/gql";
+import { Menu, addMenu } from "../../utils/types";
 import { Spinner } from "flowbite-react";
 import axios from "axios";
 
-export const AddMenu = ({toggle, id})=>{
-    const {data: d, loading: l, error: e} = useQuery(getAllCategoriesForRestaurant, {
+export const EditMenu = ({toggle, id})=>{
+    const {data: dd, loading: ll, error: ee} = useQuery(getAllCategoriesForRestaurant, {
         variables: {
             id: parseInt(JSON.parse(localStorage.getItem("user")).id),
         }
     });
-    const [MyMutation, {data, error, loading}] = useMutation(addMenu);
-    const [password, setPassword] = useState<string>("");
-    const [file, setFile] = useState<File|null>(null);
-    const [form, setForm] = useState<type>({
+    const {data: d, loading: l, error: e} = useQuery(getMenuEdit, {
+        variables: {
+            id,
+        }
+    });
+    const [MyMutation, {data, error, loading}] = useMutation(editMenu);
+    const [form, setForm] = useState<Menu>({
         "name": "",
-        "image": null,
         "available": false,
         "category": 0,
+        id,
     });
 
     useEffect(()=>{
@@ -27,28 +30,32 @@ export const AddMenu = ({toggle, id})=>{
             toggle();
             setForm({
                 "name": "",
-                "image": null,
+                id,
                 "available": true,
                 "category": 0
             });
         }
     },[data]);
 
+    useEffect(()=>{
+        if(d !==undefined){
+            setForm({
+                name: d.getMenu.name,
+                id,
+                available: d.getMenu.available,
+                category: d.getMenu.category_id,
+            });
+        }
+    }, [d]);
+
     const handleSubmit = async(e)=>{
         e.preventDefault();
-        const {data} = await axios.post("http://localhost:9003/api/uploadMenu", {
-                menu: file,
-            }, { headers: {
-                'Content-Type': 'multipart/form-data'
-                }
-        });
         MyMutation({variables: {
             input: {
                 "name": form.name,
                 "available": form.available,
-                "restaurant_id": parseInt(JSON.parse(localStorage.getItem("user")).id),
                 "category_id": form.category,
-                "image": data.message,
+                "id": form.id
               },
         }});
     };
@@ -71,39 +78,29 @@ export const AddMenu = ({toggle, id})=>{
             }));
         }
     };
-
-    const handleFile = (e)=>{
-        console.log(e.target.files[0]);
-        setFile(e.target.files[0]);
-    }
-
     return (<div className="absolute w-screen h-screen bg-transparent/80 flex justify-center items-center z-[99999]">
-        {loading ? <Spinner aria-label="Spinner button example" color="info"/> : <div className="bg-white rounded-md p-4 w-[350px] h-[500px] overflow-y-scroll">
+        {(loading || l) ? <Spinner aria-label="Spinner button example" color="info"/> : <div className="bg-white rounded-md p-4 w-[350px] h-[500px] overflow-y-scroll">
             <div className="w-full flex justify-end items-center">
-                <GrClose size={20} color="gray" onClick={()=>toggle()}/>
+                <GrClose size={20} color="gray" onClick={()=>toggle((old)=>!old)}/>
             </div>
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <div className="flex flex-col items-start gap-2 w-full">
                     <label htmlFor="name" className="font-bold">Name:</label>
-                    <input onChange={handleInput} id="name" type="text" name="name" className="outline-none rounded-md w-full"/>
+                    <input value={form.name} onChange={handleInput} id="name" type="text" name="name" className="outline-none rounded-md w-full"/>
                 </div>
                 <div className="flex flex-col items-start gap-2 w-full">
                     <label htmlFor="category" className="font-bold">Catgeory:</label>
-                    <select id="category" name="category" className="outline-none rounded-md w-full" onChange={handleInput}>
-                        { d && d.getRestaurantById?.categories?.map(({id,name})=>(<option key={id} value={id}>
+                    <select id="category" name="category" className="outline-none rounded-md w-full" onChange={handleInput} value={form.category}>
+                        { dd && dd.getRestaurantById?.categories?.map(({id,name})=>(<option key={id} value={id}>
                             {name}
                         </option>))}
                     </select>
                 </div>
                 <div className="flex flex-col items-start gap-2 w-full">
-                    <label htmlFor="image" className="font-bold w-full text-center bg-blue-500 p-4 rounded-md text-white">add image to the menu</label>
-                    <input onChange={handleFile} id="image"  type="file" name="image" className="hidden"/>
-                </div>
-                <div className="flex flex-col items-start gap-2 w-full">
                     <label htmlFor="available" className="font-bold">available:</label>
-                    <input onChange={handleInput} id="available" type="checkbox" name="available" className="outline-none rounded-md"/>
+                    <input onChange={handleInput} id="available" type="checkbox" name="available" className="outline-none rounded-md" checked={form.available ? "checked": ""}/>
                 </div>
-                <button className="w-full p-3 bg-black text-white rounded-md">add new menu</button>
+                <button className="w-full p-3 bg-black text-white rounded-md">edit menu</button>
             </form>
         </div>}
     </div>)

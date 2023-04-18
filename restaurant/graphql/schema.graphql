@@ -6,21 +6,24 @@ type Restaurant @key(fields: "id") {
     phone: String!
     address: String!
     menus: [Menu]! @hasMany
+    categories: [Category]! @hasMany
 }
 
 type Menu @key(fields: "id") {
     id: ID!
+    name: String!
     image: String!
     available: Boolean
     restaurant: Restaurant! @belongsTo
     details: [MenuDetails]! @hasMany
+    category_id: ID!
 }
 
 type MenuDetails @key(fields: "id") {
     id: ID!
     menu_id: Int!
     price: Int!
-    portion: Int!
+    portion: String!
 }
 
 type Order @key(fields: "id") {
@@ -31,25 +34,41 @@ type Order @key(fields: "id") {
     quantity: Int!
 }
 
+type Category @key(fields: "id") {
+    id: ID!
+    name: String!
+    emoji: String!
+    menus: [Menu]!
+}
+
 type Query {
-    getRestaurantById(id: ID! @eq): Restaurant! @find
+    getRestaurantById(id: ID! @eq): Restaurant!
+        @find(model: "App\\Models\\restaurant")
     getAllRestaurant: [Restaurant!] @all(model: "App\\Models\\restaurant")
     getMenu(id: ID! @eq): Menu! @find(model: "App\\Models\\menu")
     getDetailById(id: ID! @eq): MenuDetails!
         @find(model: "App\\Models\\menu_details")
     getAllOrders(id: ID! @eq): [Order]! @all(model: "App\\Models\\order")
     RestaurantLogin(email: String!, password: String!): RestaurantInfo!
+    getMenu(id: ID! @eq): Menu! @find(model: "App\\Models\\menu")
 }
 
 type Mutation {
     editRestaurant(input: EditRestaurant @spread): Restaurant!
     editMenuStatus(id: ID! @eq, status: Boolean): Menu!
+    editMenu(input: EditMenuInput @spread): Menu!
+        @update(model: "App\\Models\\menu")
     createRestaurant(input: RestaurantInput @spread): Restaurant!
         @create(model: "App\\Models\\restaurant")
     createMenu(input: MenuInput @spread): Menu!
         @create(model: "App\\Models\\menu")
-    createMenuDetails(input: MenuDetailsInput @spread): MenuDetails!
-        @create(model: "App\\Models\\menu_details")
+    createMenuDetails(input: MenuDetailsInput @spread): String!
+        @field(resolver: "App\\GraphQL\\Mutations\\createMenuDetails")
+    createCategory(
+        name: String!
+        emoji: String!
+        restaurant_id: ID!
+    ): Category! @create(model: "App\\Models\\category")
     # createRestaurant(input: RestaurantInput @spread): Restaurant!
     #     @create(model: "App\\Models\\restaurant")
 }
@@ -76,12 +95,20 @@ input MenuInput {
     restaurant_id: Int!
     image: String!
     available: Boolean = true
+    category_id: ID!
+}
+
+input EditMenuInput {
+    name: String!
+    available: Boolean = true
+    category_id: ID!
+    id: ID!
 }
 
 input MenuDetailsInput {
     menu_id: Int!
-    price: Int!
-    portion: Int!
+    price: [Int!]!
+    portion: [String!]!
 }
 
 type _Service {
