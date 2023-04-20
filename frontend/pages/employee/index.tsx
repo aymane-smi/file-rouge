@@ -14,6 +14,7 @@ export default function index(){
     useEffect(()=>{
         console.log(data);
     }, [data]);
+    
     return (
         <>
             {loading && <Loading />}

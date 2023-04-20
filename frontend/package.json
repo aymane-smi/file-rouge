@@ -28,6 +28,7 @@
     "react-countup": "^6.4.2",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
+    "react-toastify": "^9.1.2",
     "typescript": "4.9.5"
   },
   "devDependencies": {

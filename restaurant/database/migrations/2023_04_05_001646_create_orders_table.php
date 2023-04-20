@@ -14,10 +14,6 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("employee_id");
-            $table->unsignedBigInteger("menu_id");
-            $table->integer("current_price");
-            $table->integer("quantity");
-            $table->foreign("menu_id")->on("menus")->references("id");
             $table->timestamps();
         });
     }

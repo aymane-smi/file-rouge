@@ -165,7 +165,9 @@ query MyQuery($id: ID!){
             available
             name
             image
+            id
             details{
+                id
                 portion
                 price
             }
@@ -173,4 +175,28 @@ query MyQuery($id: ID!){
     }
   }
 }
+`;
+
+export const makeOrder  = gql`
+    mutation MyMutation($input: OrderInput!){
+  makeOrder(input: $input)
+  }
+`;
+
+export const deleteMenu = gql`
+    mutation MyMutation($id: ID!){
+        deleteMenu(id: $id){
+            id
+            name
+        }
+    }
+`;
+
+export const changeStatus = gql`
+    mutation editStatus($id: ID!, $status: Boolean!){
+        editMenuStatus(id: $id, available: $status){
+            id
+            available
+        }
+    }
 `;

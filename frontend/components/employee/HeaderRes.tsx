@@ -1,6 +1,22 @@
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { AiFillBell, AiOutlineDown, AiOutlineSearch } from "react-icons/ai";
+import { BiLogOut } from "react-icons/bi";
+import { BsThreeDots } from "react-icons/bs";
 
 export default function HeaderRes(){
+    const router = useRouter();
+    const [toggle, setToggle] = useState<boolean>(false);
+    const handleToggle = ()=>{
+        setToggle(!toggle);
+        console.log("clicked")
+    };
+
+    const logout = ()=>{
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        router.push("/");
+    };
     return (
         <div className="w-full p-4 flex justify-between items-center border-b-2 border-black pb-10">
             <div className="">
@@ -11,13 +27,12 @@ export default function HeaderRes(){
             </div>
 
             <div className="flex justify-center items-center gap-5">
-                <div className="p-1 border-2 rounded-md flex items-center gap-3 px-3">
-                    <AiOutlineSearch size={20}/>
-                    <input type="text" className="border-none outline-none"/>
-                </div>
-                <AiFillBell size={20}/>
-                <span>Belassiria Aymane</span>
-                <AiOutlineDown size={20}/>
+            <button onClick={handleToggle}>
+                        <BsThreeDots size={20}/>
+                    </button>
+                    {toggle && <button onClick={logout} className="absolute top-[50px] right-[10px] flex gap-3 justify-center items-center mt-2 border rounded-md p-1">
+                        <span>logout</span><BiLogOut size={20}/>
+                    </button>}
             </div>
         </div>
     );

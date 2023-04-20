@@ -14,6 +14,13 @@ type LoginInfo {
     token: String!
 }
 
+input CartItem {
+    menuId: ID!
+    detail_id: ID!
+    quantity: Int!
+    price: Int!
+}
+
 #making queries
 
 type Query {
@@ -31,7 +38,7 @@ type Mutation {
         @create(model: "App\\Models\\employee")
     deleteEmployeeById(id: ID!): Employee! @delete
     EditEmployeeByIdResolver(input: EmployeeEditInput @spread): Employee!
-    makeOrder(input: OrderInput): String
+    makeOrder(input: OrderInput! @spread): String!
 }
 
 #create inputs
@@ -59,7 +66,5 @@ input EmployeeEditInput {
 
 input OrderInput {
     employee_id: ID! @rules(apply: ["required", "filled"])
-    menu_id: ID! @rules(apply: ["required", "filled"])
-    qte: Int! @rules(apply: ["required", "filled"])
-    price: Int! @rules(apply: ["required", "filled"])
+    detail: [CartItem!]
 }

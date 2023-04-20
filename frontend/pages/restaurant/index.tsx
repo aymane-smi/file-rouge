@@ -6,16 +6,19 @@ import { useEffect, useState } from "react";
 import { CardInfo } from "../../components/restaurant/CardInfo";
 import { AddMenu } from "../../components/restaurant/AddMenu";
 import { AddCategory } from "../../components/restaurant/AddCategory";
-import { getRestaurantMenus } from "../../utils/gql";
+import { changeStatus, deleteMenu, getRestaurantMenus } from "../../utils/gql";
 import { Menus } from "../../utils/types";
 import { Table } from "flowbite-react";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { Loading } from "../../components/utils/Loading";
 import { AddDetails } from "../../components/restaurant/AddDetails";
 import { EditMenu } from "../../components/restaurant/EditMenu";
+import { toast } from "react-toastify";
 
 export default function index(){
         const [GetRestaurantById, {data, loading, error}] = useLazyQuery(getRestaurantMenus);
+        const [MyMutation, {data:d, loading:l, error:e}] = useMutation(deleteMenu);
+        const [editStatus, {data: dd, loading: ll, error: ee}] = useMutation(changeStatus);
         useEffect(()=>{
             GetRestaurantById({
                 variables: {
@@ -54,7 +57,46 @@ export default function index(){
             setEdit(!Edit);
         }
 
-        if(loading)
+        const handleMenu = (e)=>{
+            MyMutation({
+                variables: {
+                    id: parseInt(e.target.value)
+                }
+            });
+
+            setMenus((old)=>old?.filter((menu)=>menu.id !== e.target.value));
+
+            toast.success("menu deleted", {
+                position: toast.POSITION.TOP_RIGHT,
+            });
+        }
+
+        const handleStatus = (e, available: boolean)=>{
+            editStatus({
+                variables: {
+                    id: parseInt(e.target.value),
+                    status: !available,
+                }
+            });
+
+            setMenus((old)=>{
+                let tmp = old?.map((item)=>{
+                    if(item.id == e.target.value)
+                        return {
+                            ...item,
+                            available,
+                        }
+                });
+                console.log(old);
+                return tmp;
+            });
+
+            toast.success("status changed", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        };
+
+        if(loading || l || ll)
             return <Loading />
         else
             return (<>
@@ -92,8 +134,8 @@ export default function index(){
                                 </Table.Cell>
                                 <Table.Cell>
                                     <button className="rounded-md font-semibold text-orange-500 p-3 bg-orange-200" onClick={toggleEdit} value={id}>edit</button>
-                                    <button className="rounded-md ml-2 font-semibold text-red-500 p-3 bg-red-200">remove</button>
-                                    {available ? <button className="rounded-md ml-2 font-semibold text-gray-500 p-3 bg-gray-200">disable</button> : <button className="rounded-md ml-2 font-semibold text-blue-500 p-3 bg-blue-200">enable</button>}
+                                    <button className="rounded-md ml-2 font-semibold text-red-500 p-3 bg-red-200" value={id} onClick={handleMenu}>remove</button>
+                                    {available ? <button className="rounded-md ml-2 font-semibold text-gray-500 p-3 bg-gray-200" onClick={(e)=>handleStatus(e, available)} value={id}>disable</button> : <button className="rounded-md ml-2 font-semibold text-blue-500 p-3 bg-blue-200" onClick={(e)=>handleStatus(e, available)} value={id}>enable</button>}
                                     <button className="ml-2 rounded-md font-semibold text-green-500 p-3 bg-green-200" value={id} onClick={handleDetails}>add details</button>
                                 </Table.Cell>
                             </Table.Row>))}

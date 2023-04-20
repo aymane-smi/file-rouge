@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\order;
+use App\Models\orderDetails;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
@@ -28,13 +29,15 @@ class makeOrder extends Command
     public function handle(): void
     {
         Redis::subscribe("order:create", function ($message) {
-            $tmp = json_decode($message)->input;
-            order::create([
-                "employee_id" => $tmp->employee_id,
-                "menu_id" => $tmp->menu_id,
-                "quantity" => $tmp->qte,
-                "current_price" => $tmp->price
-            ]);
+            $tmp = json_decode($message);
+            $order = order::create(["employee_id" => $tmp->employee_id]);
+            foreach ($tmp->detail as $detail)
+                orderDetails::create([
+                    "order_id" => $order->id,
+                    "menu_id" => $detail->menuId,
+                    "quantity" => $detail->quantity,
+                    "current_price" => $detail->price,
+                ]);
         });
     }
 }

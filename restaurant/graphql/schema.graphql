@@ -55,7 +55,7 @@ type Query {
 
 type Mutation {
     editRestaurant(input: EditRestaurant @spread): Restaurant!
-    editMenuStatus(id: ID! @eq, status: Boolean): Menu!
+    editMenuStatus(id: ID! @eq, available: Boolean): Menu!
     editMenu(input: EditMenuInput @spread): Menu!
         @update(model: "App\\Models\\menu")
     createRestaurant(input: RestaurantInput @spread): Restaurant!
@@ -69,6 +69,7 @@ type Mutation {
         emoji: String!
         restaurant_id: ID!
     ): Category! @create(model: "App\\Models\\category")
+    deleteMenu(id: ID! @eq): Menu! @delete(model: "App\\Models\\menu")
     # createRestaurant(input: RestaurantInput @spread): Restaurant!
     #     @create(model: "App\\Models\\restaurant")
 }

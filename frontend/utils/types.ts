@@ -32,7 +32,8 @@ export type addMenu = {
 export type Menus = {
     image: String,
     name: String,
-    id: number
+    id: number,
+    available: boolean,
 }[];
 
 export type Details = {
@@ -46,3 +47,13 @@ export type Menu = {
     available: boolean,
     category: number
 }
+
+export type cart = {
+    id: number,
+    name: string,
+    image: string
+    price: number,
+    portion: string,
+    quantity: number,
+    detail: number,
+}[];
