@@ -22,16 +22,21 @@ type Menu @key(fields: "id") {
 type MenuDetails @key(fields: "id") {
     id: ID!
     menu_id: Int!
-    price: Int!
-    portion: String!
+    price: Int
+    portion: String
+    quantity: Int!
 }
 
 type Order @key(fields: "id") {
     id: ID!
-    employee_id: ID!
+    first_name: String!
+    last_name: String!
+    phone: String!
     menu_id: ID!
     current_price: Int!
     quantity: Int!
+    ticket: Boolean!
+    status: Int!
 }
 
 type Category @key(fields: "id") {
@@ -39,6 +44,15 @@ type Category @key(fields: "id") {
     name: String!
     emoji: String!
     menus: [Menu]!
+}
+
+type Employee @key(fields: "id", resolvable: false) {
+    id: ID!
+}
+
+type DetailsOfOrder {
+    detail: MenuDetails!
+    menu: Menu!
 }
 
 type Query {
@@ -51,6 +65,9 @@ type Query {
     getAllOrders(id: ID! @eq): [Order]! @all(model: "App\\Models\\order")
     RestaurantLogin(email: String!, password: String!): RestaurantInfo!
     getMenu(id: ID! @eq): Menu! @find(model: "App\\Models\\menu")
+    getRestaurantOrder(restaurant_id: ID! @eq): [Order]!
+        @all(model: "App\\Models\\order")
+    GetDetailsOfOrder(id: ID!): [DetailsOfOrder]!
 }
 
 type Mutation {
@@ -70,6 +87,8 @@ type Mutation {
         restaurant_id: ID!
     ): Category! @create(model: "App\\Models\\category")
     deleteMenu(id: ID! @eq): Menu! @delete(model: "App\\Models\\menu")
+    DeleteDetail(id: ID! @eq): String
+    OrderChangeStatus(id: ID!, status: Int!): String!
     # createRestaurant(input: RestaurantInput @spread): Restaurant!
     #     @create(model: "App\\Models\\restaurant")
 }
@@ -78,8 +97,8 @@ input EditRestaurant {
     id: ID! @rules(apply: ["required", "filled"])
     name: String! @rules(apply: ["required", "filled"])
     email: String! @rules(apply: ["required", "filled", "email"])
-    password: String! @rules(apply: ["required", "filled"])
-    phone: String! @rules(apply: ["required", "filled"])
+    password: String
+    phone: String!
     address: String! @rules(apply: ["required", "filled"])
 }
 

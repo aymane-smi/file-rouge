@@ -15,6 +15,7 @@ export default function HeaderRes(){
     const logout = ()=>{
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+        localStorage.removeItem("role");
         router.push("/");
     };
     return (

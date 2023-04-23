@@ -6,7 +6,7 @@ export const HeaderRes = ({toggle})=>{
             Welcome, <span className="font-thin">admin</span>
         </p>
         <div className="flex justify-center items-center gap-4">
-            <button onClick={toggle} className="p-2 bg-black text-white font-semibold rounded-md">add new restaurant</button>
+            <button onClick={toggle} className="p-2 bg-black text-white font-semibold rounded-md">add new employee</button>
             <AiOutlineDown size={20}/>
         </div>
     </div>);

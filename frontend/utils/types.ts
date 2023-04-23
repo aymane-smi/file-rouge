@@ -57,3 +57,23 @@ export type cart = {
     quantity: number,
     detail: number,
 }[];
+
+export type EmployeeInput = {
+    email: string,
+    first_name: string
+    last_name: string
+    phone: string,
+    haveTicket: boolean,
+    class: string,
+    year: string,
+    password: string
+}
+
+export type orderType = {
+    id: string,
+    first_name: string
+    last_name: string
+    phone: string,
+    ticket: boolean,
+    status: number,
+}[]

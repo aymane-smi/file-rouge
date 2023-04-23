@@ -1,5 +1,4 @@
 import Head from "next/head";
-import SideBar from "../../components/employee/sideBar";
 import styles from "../../styles/restaurant.module.css";
 import { HeaderRes } from "../../components/restaurant/HeaderRes";
 import { useEffect, useState } from "react";
@@ -9,11 +8,13 @@ import { AddCategory } from "../../components/restaurant/AddCategory";
 import { changeStatus, deleteMenu, getRestaurantMenus } from "../../utils/gql";
 import { Menus } from "../../utils/types";
 import { Table } from "flowbite-react";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Loading } from "../../components/utils/Loading";
 import { AddDetails } from "../../components/restaurant/AddDetails";
 import { EditMenu } from "../../components/restaurant/EditMenu";
 import { toast } from "react-toastify";
+import { ShowDetails } from "../../components/restaurant/ShowDetails";
+import SideBar from "../../components/restaurant/sideBar";
 
 export default function index(){
         const [GetRestaurantById, {data, loading, error}] = useLazyQuery(getRestaurantMenus);
@@ -36,6 +37,8 @@ export default function index(){
         const [menuId, setMenuId] = useState<number>(0);
         const [Edit, setEdit] = useState<boolean>(false);
         const [editId, setEditId] = useState<number>(0);
+        const [info, setInfo] = useState<boolean>(false);
+
         const toggle = ()=>{
             setToggleMenu(!toggleMenu);
         }
@@ -96,6 +99,12 @@ export default function index(){
             });
         };
 
+        const toggleInfo = (e)=>{
+
+            setInfo((old)=>!old);
+            setMenuId(parseInt(e.target.value));
+        }
+
         if(loading || l || ll)
             return <Loading />
         else
@@ -107,6 +116,7 @@ export default function index(){
             {toggleMenu && <AddMenu toggle={toggle}/>}
             {Category && <AddCategory toggle={toggleCategory}/>}
             {addDetails && <AddDetails id={menuId} toggle={toggleDetails}/>}
+            {info && <ShowDetails id={menuId} toggle={setInfo}/>}
             <main className="flex w-screen h-screen">
                 <SideBar />
                 <div className={["max-h-screen pb-3", "overflow-y-scroll", styles.width].join(" ")}>
@@ -120,14 +130,18 @@ export default function index(){
                         <Table.Head>
                             <Table.HeadCell>name</Table.HeadCell>
                             <Table.HeadCell>image</Table.HeadCell>
+                            <Table.HeadCell>category</Table.HeadCell>
                             <Table.HeadCell>status</Table.HeadCell>
                             <Table.HeadCell></Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
-                            {menus && menus.map(({id,name, image, available})=>(<Table.Row key={id}>
+                            {menus && menus.map(({id,name, image, available, category_id})=>(<Table.Row key={id}>
                                 <Table.Cell>{name}</Table.Cell>
                                 <Table.Cell>
                                     <img src={"http://localhost:9003/storage/menu/"+image} className="w-[100px] h-[100px]"/>
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {category_id}
                                 </Table.Cell>
                                 <Table.Cell>
                                     {available ? <p className="py-2 px-4 rounded-md bg-green-100 text-green-600 w-fit">available</p> : <p className="py-2 px-4 rounded-md bg-red-100 text-red-600 w-fit">not available</p>}
@@ -137,6 +151,7 @@ export default function index(){
                                     <button className="rounded-md ml-2 font-semibold text-red-500 p-3 bg-red-200" value={id} onClick={handleMenu}>remove</button>
                                     {available ? <button className="rounded-md ml-2 font-semibold text-gray-500 p-3 bg-gray-200" onClick={(e)=>handleStatus(e, available)} value={id}>disable</button> : <button className="rounded-md ml-2 font-semibold text-blue-500 p-3 bg-blue-200" onClick={(e)=>handleStatus(e, available)} value={id}>enable</button>}
                                     <button className="ml-2 rounded-md font-semibold text-green-500 p-3 bg-green-200" value={id} onClick={handleDetails}>add details</button>
+                                    <button className="ml-2 rounded-md font-semibold text-blue-200 p-3 bg-blue-500" value={id} onClick={toggleInfo} >show details</button>
                                 </Table.Cell>
                             </Table.Row>))}
                         </Table.Body>

@@ -17,6 +17,8 @@ query($email: String!, $password: String!){
             email
             first_name
             last_name
+            phone
+            haveTicket
         }
         token
     }
@@ -106,6 +108,12 @@ query GetRestaurantById($id: ID!) {
       image
       name
       available
+      category_id
+      details{
+        id
+        portion
+        price
+      }
     }
   }
 }
@@ -131,8 +139,8 @@ export const addMenuDetails = gql`
 `;
 
 export const getMenuEdit = gql`
-    query MyQuery {
-    getMenu(id: 5) {
+    query MyQuery ($id: ID!){
+    getMenu(id: $id) {
         id
         name
         available
@@ -157,6 +165,9 @@ query MyQuery($id: ID!){
   getRestaurantById(id: $id){
     id
     name
+    email
+    phone
+    address
     categories{
         emoji
         id
@@ -197,6 +208,94 @@ export const changeStatus = gql`
         editMenuStatus(id: $id, available: $status){
             id
             available
+        }
+    }
+`;
+
+export const removeDetail = gql`
+    mutation MyMutation($id: ID!){
+        DeleteDetail(id: $id)
+    }
+`;
+
+export const getAllEmployees = gql`
+    query{
+        getAllEmployee{
+            id,
+            first_name,
+            last_name,
+            phone,
+            class,
+            year,
+            email
+        }
+    }
+`;
+
+export const addEmployee = gql`
+    mutation MyMutation($input: EmployeeInput!){
+        createEmployee(input: $input)
+    }
+`;
+
+
+export const getOrder = gql`
+    query Query($restaurant_id: ID!){
+        getRestaurantOrder(restaurant_id: $restaurant_id){
+            id,
+            ticket
+            first_name
+            last_name
+            phone
+            status
+        }
+    }
+`;
+
+export const changeOrderStatus = gql`
+    mutation changeOrderStatus($id: ID!, $status: Int!){
+        OrderChangeStatus(id: $id, status: $status)
+    }
+`;
+
+export const getOrderDetails = gql`
+query MyQuery($id: ID!){
+  GetDetailsOfOrder(id: $id) {
+    menu {
+      name
+    }
+    detail {
+      id
+      menu_id
+      portion
+      price
+      quantity
+    }
+  }
+}
+`;
+
+export const editRestaurant = gql`
+    mutation edit($input: EditRestaurant!){
+        editRestaurant(input: $input){
+            name
+            email
+            phone
+            address
+            password
+        }
+    }
+`;
+
+export const editEmployee = gql`
+    mutation edit($input: EmployeeEditInput!){
+        EditEmployeeByIdResolver(input: $input){
+            first_name
+            last_name
+            email
+            phone
+            class
+            year
         }
     }
 `;

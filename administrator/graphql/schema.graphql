@@ -10,6 +10,7 @@ type AdminInfo {
     administrator: Administrator!
     token: String!
 }
+
 #making queries
 
 type Query {
@@ -26,6 +27,8 @@ type Mutation {
     addAdministrator(input: AdministratorInput @spread): Administrator!
         @create(model: "App\\Models\\administrator")
     AddComplain(input: Complain @spread): String!
+
+    createEmployee(input: EmployeeInput @spread): String!
 }
 
 #create inputs
@@ -50,4 +53,15 @@ input Complain {
     last_name: String!
     description: String!
     image: String
+}
+
+input EmployeeInput {
+    first_name: String! @rules(apply: ["required", "filled"])
+    last_name: String! @rules(apply: ["required", "filled"])
+    email: String! @rules(apply: ["email"])
+    password: String! @rules(apply: ["required", "filled"])
+    year: Int! @rules(apply: ["required", "filled"])
+    class: String! @rules(apply: ["required", "filled"])
+    phone: String!
+    haveTicket: Boolean = false
 }

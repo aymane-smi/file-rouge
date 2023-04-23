@@ -62,7 +62,7 @@ export default function RestaurantEmployee(){
             {loading ? <Loading /> : <>
             <SideBar />
             <div className={["h-screen overflow-y-scroll relative", styles.width].join(" ")}>
-                <Cart />
+                <Cart id={router.query.id}/>
                 <HeaderRes />
                 <div className={["p-10", styles.width].join(" ")}>
                     <div className="flex gap-5 w-full overflow-x-scroll">

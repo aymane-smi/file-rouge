@@ -10,4 +10,9 @@ class orderDetails extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function menu()
+    {
+        return $this->belongsTo(menu::class);
+    }
 }

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiLogOut } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 
@@ -7,6 +7,12 @@ import { BsThreeDots } from "react-icons/bs";
 export default function Header(){
     const router = useRouter();
     const [toggle, setToggle] = useState<boolean>(false);
+    const [name, setName] = useState<string>("");
+
+    useEffect(()=>{
+        setName(JSON.parse(localStorage.getItem("user")).name);
+    }, [name]);
+
     const handleToggle = ()=>{
         setToggle(!toggle);
         console.log("clicked")
@@ -22,7 +28,7 @@ export default function Header(){
     return (
         <div className="w-full p-4 flex justify-between items-center border-b-2 border-black pb-10">
             <p className="text-[20px]">
-                <span className="font-bold">Hello</span>, Aymane
+                <span className="font-bold">Hello</span>, {name !== "" && name}
             </p>
 
             <div className="flex justify-center items-center gap-5">

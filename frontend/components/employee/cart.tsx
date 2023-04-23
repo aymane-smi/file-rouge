@@ -4,8 +4,9 @@ import { makeOrder } from "../../utils/gql";
 import { useMutation } from "@apollo/client";
 import { Loading } from "../utils/Loading";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
-export default function Cart(){
+export default function Cart({id}){
     
     const { setOpen, open, cartItems, setCart } = GlobalCartContext();
     const [MyMutation, {loading, data, error}] = useMutation(makeOrder);
@@ -40,17 +41,22 @@ export default function Cart(){
     };
 
     const sendOrder = ()=>{
-        console.log(cartItems.length);
+        let user = JSON.parse(localStorage.getItem("user"));
         if(cartItems.length > 0)
             MyMutation({
                 variables: {
                     input :{
-                        employee_id: parseInt(JSON.parse(localStorage.getItem("user")).id),
+                        employee_id: parseInt(user.id),
+                        restaurant_id: parseInt(id),
+                        phone: user.phone,
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        haveTicket: user.haveTicket,
                         detail: cartItems.map((item)=>({
                             menuId: item.id,
                             detail_id: item.detail_id,
                             quantity: item.quantity,
-                            price: item.price
+                            price: item.price,
                         }))
                     },
                 }

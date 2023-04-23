@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AiOutlineHome } from "react-icons/ai";
-import { BsBasket, BsFillTelephoneFill } from "react-icons/bs";
+import { BsBasket, BsFillGearFill, BsFillTelephoneFill } from "react-icons/bs";
 import { GlobalCartContext } from "../../lib/context";
 
 export default function SideBar(){
@@ -11,9 +11,12 @@ export default function SideBar(){
             <AiOutlineHome size={30}/>
         </Link>
         <BsBasket size={30} onClick={()=>setOpen((old : boolean)=>!old)}/>
+        <Link href="/employee/claim">
+            <BsFillTelephoneFill size={30}/>
+        </Link>
     </div>
-    <Link href="/employee/claim">
-        <BsFillTelephoneFill size={30}/>
+    <Link href="/employee/edit">
+        <BsFillGearFill size={30}/>
     </Link>
 </nav>);
 }

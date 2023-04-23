@@ -30,7 +30,13 @@ class makeOrder extends Command
     {
         Redis::subscribe("order:create", function ($message) {
             $tmp = json_decode($message);
-            $order = order::create(["employee_id" => $tmp->employee_id]);
+            $order = order::create([
+                "employee_id" => $tmp->employee_id,
+                "restaurant_id" => $tmp->restaurant_id,
+                "first_name" => $tmp->first_name,
+                "last_name" => $tmp->last_name,
+                "phone" => $tmp->phone,
+            ]);
             foreach ($tmp->detail as $detail)
                 orderDetails::create([
                     "order_id" => $order->id,
