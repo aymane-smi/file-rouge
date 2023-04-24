@@ -1,6 +1,6 @@
 import EmojiPicker from "emoji-picker-react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
@@ -8,6 +8,7 @@ import { BsThreeDots } from "react-icons/bs";
 export const HeaderRes = ({toggle, category})=>{
     const router = useRouter();
     const [Toggle, setToggle] = useState<boolean>(false);
+    const [user, setUser] = useState(null);
     const handleToggle = ()=>{
         setToggle(!Toggle);
         console.log("clicked")
@@ -19,9 +20,13 @@ export const HeaderRes = ({toggle, category})=>{
         localStorage.removeItem("role");
         router.push("/");
     };
+
+    useEffect(()=>{
+        setUser(JSON.parse(localStorage.getItem("user")));
+    }, []);
     return (<div className="flex w-full justify-between items-center p-4">
         <p className="font-bold text-[25px]">
-            Welcome, <span className="font-thin">admin</span>
+            Welcome, <span className="font-thin">{user && user.name}</span>
         </p>
         <div className="flex justify-center items-center gap-4">
             <button onClick={toggle} className="p-2 bg-black text-white font-semibold rounded-md">add new menu</button>

@@ -4,13 +4,13 @@ import { AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 
-export const Header = ()=>{
+export const Header2 = ({toggle})=>{
     const router = useRouter();
-    const [toggle, setToggle] = useState<boolean>(false);
+    const [t, setToggle] = useState<boolean>(false);
     const handleToggle = ()=>{
-        setToggle(!toggle);
+        setToggle(!t);
         console.log("clicked")
-    }
+    };
 
     const logout = ()=>{
         localStorage.removeItem("user");
@@ -22,16 +22,16 @@ export const Header = ()=>{
         <p className="font-bold text-[25px]">
             Welcome, <span className="font-thin">admin</span>
         </p>
-        <div className="flex justify-center items-center gap-5">
-                <div className="flex flex-col items-end justify-center rlative">
-                    <button onClick={handleToggle}>
+        <div className="flex justify-center items-center gap-4">
+            <button onClick={toggle} className="p-2 bg-black text-white font-semibold rounded-md">add new restaurant</button>
+            <div className="flex justify-center items-center gap-5">
+            <button onClick={handleToggle}>
                         <BsThreeDots size={20}/>
                     </button>
-                    {toggle && <button onClick={logout} className="absolute top-[40px] flex gap-3 justify-center items-center mt-2 border rounded-md p-1">
+                    {t && <button onClick={logout} className="absolute top-[50px] right-[10px] flex gap-3 justify-center items-center mt-2 border rounded-md p-1">
                         <span>logout</span><BiLogOut size={20}/>
                     </button>}
-                </div>
-
             </div>
+        </div>
     </div>);
 }

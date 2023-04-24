@@ -127,6 +127,7 @@ mutation MyMutation($input: MenuInput!){
     image
     name
     available
+    category_id,
   }
 }
 `;
@@ -298,4 +299,67 @@ export const editEmployee = gql`
             year
         }
     }
+`;
+
+export const countAdmin = gql`
+query Query {
+  countRestaurant
+  countEmployee
+  countAdministrator
+}
+`;
+
+
+export const employeeByClass = gql`
+    query Query($class: String!) {
+  getEmployeeByClass(class: $class) {
+    class
+    email
+    first_name
+    haveTicket
+    id
+    last_name
+    phone
+    year
+  }
+}
+`;
+
+export const ResOrder = gql`
+query MyQuery {
+  OrderPerRestaurant {
+    count
+    name
+  }
+}
+`;
+
+
+export const bill = gql`
+query Query($year: Int!, $month: Int!, $id: ID!) {
+    OrderBill(year: $year, month: $month, id: $id) {
+      first_name
+      last_name
+      total
+    }
+  }`;
+
+
+export const editAdministrator = gql`
+    mutation edit($input: AdministratorEditInput!){
+        editAdministratorByIdResolver(input: $input){
+            first_name
+            last_name
+            email
+            id
+        }
+    }
+`;
+
+export const RestaurantOrders = gql`
+query MyQuery {
+  OrderSuccess(restaurant_id: 1, status: 1)
+  OrderFailure(restaurant_id: 1, status: 0)
+  OrderByRestaurant(restaurant_id: 1)
+}
 `;

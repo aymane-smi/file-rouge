@@ -34,6 +34,7 @@ export type Menus = {
     name: String,
     id: number,
     available: boolean,
+    category_id: string|number
 }[];
 
 export type Details = {

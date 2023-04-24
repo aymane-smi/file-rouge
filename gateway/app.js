@@ -3,13 +3,12 @@ import { ApolloServer } from "apollo-server";
 import FileUploadDataSource from '@profusion/apollo-federation-upload';
 class test extends RemoteGraphQLDataSource{
   async willSendRequest({req, context}){
-    console.log(context)
+    console.log(context.headers);
     console.log(req);
   }
 }
 const gateway = new ApolloGateway({
   buildService: ({ url, name, requestContext }) => {
-    console.log(requestContext);
     return new test({url});
   },
   supergraphSdl: new IntrospectAndCompose({
@@ -25,9 +24,7 @@ const gateway = new ApolloGateway({
 const server = new ApolloServer({
     gateway,
     subscriptions: false,
-    debug: true,
     context: ({ req }) => ({ req }),
-    uploads: false,
 });
 // start the gateway server
 server.listen().then(({ url }) => {

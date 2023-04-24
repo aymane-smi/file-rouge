@@ -16,6 +16,7 @@ type AdminInfo {
 type Query {
     getAdministratorById(id: ID! @eq): Administrator @find
     AdminLogin(email: String!, password: String!): AdminInfo!
+    countAdministrator: Int! @count(model: "App\\Models\\administrator")
 }
 
 #making mutations
@@ -27,7 +28,6 @@ type Mutation {
     addAdministrator(input: AdministratorInput @spread): Administrator!
         @create(model: "App\\Models\\administrator")
     AddComplain(input: Complain @spread): String!
-
     createEmployee(input: EmployeeInput @spread): String!
 }
 

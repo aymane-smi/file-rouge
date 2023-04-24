@@ -27,6 +27,8 @@ final class EditEmployeeByIdResolver
         } else {
             DB::table("employees")->where("id", $args["id"])->update($args);
             $tmp = employee::find($args["id"]);
+            $tmp->password = bcrypt($args["password"]);
+            $tmp->save();
         }
         return $tmp;
     }

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { CardInfo } from "../../components/restaurant/CardInfo";
 import { AddMenu } from "../../components/restaurant/AddMenu";
 import { AddCategory } from "../../components/restaurant/AddCategory";
-import { changeStatus, deleteMenu, getRestaurantMenus } from "../../utils/gql";
+import { RestaurantOrders, changeStatus, deleteMenu, getRestaurantMenus } from "../../utils/gql";
 import { Menus } from "../../utils/types";
 import { Table } from "flowbite-react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -16,10 +16,11 @@ import { toast } from "react-toastify";
 import { ShowDetails } from "../../components/restaurant/ShowDetails";
 import SideBar from "../../components/restaurant/sideBar";
 
-export default function index(){
+export default function Index(){
         const [GetRestaurantById, {data, loading, error}] = useLazyQuery(getRestaurantMenus);
         const [MyMutation, {data:d, loading:l, error:e}] = useMutation(deleteMenu);
         const [editStatus, {data: dd, loading: ll, error: ee}] = useMutation(changeStatus);
+        const {data: ddd, loading: lll} = useQuery(RestaurantOrders);
         useEffect(()=>{
             GetRestaurantById({
                 variables: {
@@ -30,6 +31,7 @@ export default function index(){
         useEffect(()=>{
             setMenus(data?.getRestaurantById?.menus);
         }, [data]);
+
         const [menus, setMenus] = useState<Menus | null>(null);
         const [toggleMenu, setToggleMenu] = useState<boolean>(false);
         const [Category, setToggleCategory] = useState<boolean>(false);
@@ -38,6 +40,8 @@ export default function index(){
         const [Edit, setEdit] = useState<boolean>(false);
         const [editId, setEditId] = useState<number>(0);
         const [info, setInfo] = useState<boolean>(false);
+
+        useEffect(()=>{}, [menus]);
 
         const toggle = ()=>{
             setToggleMenu(!toggleMenu);
@@ -89,8 +93,9 @@ export default function index(){
                             ...item,
                             available,
                         }
+                    return item;
                 });
-                console.log(old);
+                console.log(tmp, e.target.value);
                 return tmp;
             });
 
@@ -105,7 +110,7 @@ export default function index(){
             setMenuId(parseInt(e.target.value));
         }
 
-        if(loading || l || ll)
+        if(loading || l || ll || lll || ddd == undefined)
             return <Loading />
         else
             return (<>
@@ -113,7 +118,7 @@ export default function index(){
                 <title>Restaurant Dashboard</title>
             </Head>
             {Edit && <EditMenu toggle={setEdit} id={editId}/>}
-            {toggleMenu && <AddMenu toggle={toggle}/>}
+            {toggleMenu && <AddMenu toggle={toggle} menu={setMenus}/>}
             {Category && <AddCategory toggle={toggleCategory}/>}
             {addDetails && <AddDetails id={menuId} toggle={toggleDetails}/>}
             {info && <ShowDetails id={menuId} toggle={setInfo}/>}
@@ -122,9 +127,9 @@ export default function index(){
                 <div className={["max-h-screen pb-3", "overflow-y-scroll", styles.width].join(" ")}>
                     <HeaderRes toggle={toggle} category={toggleCategory}/>
                     <div className="flex gap-5 justify-center items-center mt-5">
-                    <CardInfo description="number of orders" numberOf={12}/>
-                    <CardInfo description="successful order" numberOf={10}/>
-                    <CardInfo description="canceled order" numberOf={2}/>
+                    <CardInfo description="number of orders" numberOf={ddd.OrderByRestaurant}/>
+                    <CardInfo description="successful order" numberOf={ddd.OrderSuccess}/>
+                    <CardInfo description="canceled order" numberOf={ddd.OrderFailure}/>
                     </div>
                     <Table className="z-0 mt-10">
                         <Table.Head>
@@ -135,7 +140,7 @@ export default function index(){
                             <Table.HeadCell></Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
-                            {menus && menus.map(({id,name, image, available, category_id})=>(<Table.Row key={id}>
+                            {menus && menus.map(({id, name, image, available, category_id})=>(<Table.Row key={id}>
                                 <Table.Cell>{name}</Table.Cell>
                                 <Table.Cell>
                                     <img src={"http://localhost:9003/storage/menu/"+image} className="w-[100px] h-[100px]"/>

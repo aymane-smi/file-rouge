@@ -28,21 +28,24 @@ type Query {
     getEmployeeById(id: ID! @eq): Employee
         @guard
         @find(model: "App\\Models\\employee")
-    getAllEmployee: [Employee]! @guard @all(model: "App\\Models\\employee")
+    getAllEmployee: [Employee]! @all(model: "App\\Models\\employee")
     getEmployeeByYear(year: Int! @eq): [Employee]!
         @all(model: "App\\Models\\employee")
     getEmployeeByClass(class: String! @eq): [Employee]!
         @all(model: "App\\Models\\employee")
-    Login(email: String!, password: String!): LoginInfo
+    Login(email: String!, password: String!): LoginInfo!
+
+    countEmployee: Int! @count(model: "App\\Models\\employee")
 }
 
 #making mutations
 
 type Mutation {
-    deleteEmployeeById(id: ID!): @guard Employee!
+    deleteEmployeeById(id: ID!): Employee!
+        @guard
         @delete(model: "App\\Models\\employee")
-    EditEmployeeByIdResolver(input: EmployeeEditInput @spread): @guard Employee!
-    makeOrder(input: OrderInput! @spread): @guard String!
+    EditEmployeeByIdResolver(input: EmployeeEditInput @spread): Employee! @guard
+    makeOrder(input: OrderInput! @spread): String! @guard
 }
 
 #create inputs

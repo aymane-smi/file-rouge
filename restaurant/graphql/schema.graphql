@@ -55,6 +55,17 @@ type DetailsOfOrder {
     menu: Menu!
 }
 
+type OrdrBills {
+    first_name: String!
+    last_name: String
+    total: Int!
+}
+
+type ResOrder {
+    count: Int!
+    name: String!
+}
+
 type Query {
     getRestaurantById(id: ID! @eq): Restaurant!
         @find(model: "App\\Models\\restaurant")
@@ -68,6 +79,15 @@ type Query {
     getRestaurantOrder(restaurant_id: ID! @eq): [Order]!
         @all(model: "App\\Models\\order")
     GetDetailsOfOrder(id: ID!): [DetailsOfOrder]!
+    countRestaurant: Int! @count(model: "App\\Models\\restaurant")
+    OrderBill(year: Int!, month: Int!, id: ID!): [OrdrBills]!
+    OrderPerRestaurant: [ResOrder]!
+    OrderSuccess(restaurant_id: ID! @eq, status: Int! @eq): Int!
+        @count(model: "App\\Models\\order")
+    OrderFailure(restaurant_id: ID! @eq, status: Int! @eq): Int!
+        @count(model: "App\\Models\\order")
+    OrderByRestaurant(restaurant_id: ID!): Int!
+        @count(model: "App\\Models\\order")
 }
 
 type Mutation {

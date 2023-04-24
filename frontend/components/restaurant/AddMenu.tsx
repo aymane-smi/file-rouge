@@ -6,7 +6,7 @@ import { addMenu as type } from "../../utils/types";
 import { Spinner } from "flowbite-react";
 import axios from "axios";
 
-export const AddMenu = ({toggle, id})=>{
+export const AddMenu = ({toggle, id, menu})=>{
     const {data: d, loading: l, error: e} = useQuery(getAllCategoriesForRestaurant, {
         variables: {
             id: parseInt(JSON.parse(localStorage.getItem("user")).id),
@@ -24,13 +24,20 @@ export const AddMenu = ({toggle, id})=>{
 
     useEffect(()=>{
         if(data !== undefined){
-            toggle();
             setForm({
                 "name": "",
                 "image": null,
                 "available": true,
                 "category": 0
             });
+            menu((old)=>[...old, {
+                id: data?.createMenu.id,
+                name: data?.createMenu.name,
+                category_id: data?.createMenu.category_id,
+                image: data?.createMenu.image,
+                available: data?.createMenu.available
+            }]);
+            toggle();
         }
     },[data]);
 
