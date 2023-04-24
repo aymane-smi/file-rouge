@@ -8,10 +8,18 @@ import { useQuery } from "@apollo/client";
 import { getAllRestaurant } from "../../utils/gql";
 import {useEffect} from "react";
 import { Loading } from "../../components/utils/Loading";
+import { AuthEmployee } from "../../utils/authEmployee";
+import { useRouter } from "next/router";
 
 export default function index(){
     const {data, error, loading} = useQuery(getAllRestaurant);
+
+    const {push} = useRouter();
     useEffect(()=>{
+        let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "employee")
+                push("/");
         console.log(data);
     }, [data]);
     

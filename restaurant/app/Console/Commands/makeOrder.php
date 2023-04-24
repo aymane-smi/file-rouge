@@ -36,6 +36,7 @@ class makeOrder extends Command
                 "first_name" => $tmp->first_name,
                 "last_name" => $tmp->last_name,
                 "phone" => $tmp->phone,
+                "ticket" => $tmp->haveTicket,
             ]);
             foreach ($tmp->detail as $detail)
                 orderDetails::create([

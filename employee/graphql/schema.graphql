@@ -25,9 +25,7 @@ input CartItem {
 #making queries
 
 type Query {
-    getEmployeeById(id: ID! @eq): Employee
-        @guard
-        @find(model: "App\\Models\\employee")
+    getEmployeeById(id: ID! @eq): Employee @find(model: "App\\Models\\employee")
     getAllEmployee: [Employee]! @all(model: "App\\Models\\employee")
     getEmployeeByYear(year: Int! @eq): [Employee]!
         @all(model: "App\\Models\\employee")
@@ -42,10 +40,9 @@ type Query {
 
 type Mutation {
     deleteEmployeeById(id: ID!): Employee!
-        @guard
         @delete(model: "App\\Models\\employee")
-    EditEmployeeByIdResolver(input: EmployeeEditInput @spread): Employee! @guard
-    makeOrder(input: OrderInput! @spread): String! @guard
+    EditEmployeeByIdResolver(input: EmployeeEditInput @spread): Employee!
+    makeOrder(input: OrderInput! @spread): String!
 }
 
 #create inputs

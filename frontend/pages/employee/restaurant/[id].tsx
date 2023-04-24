@@ -14,6 +14,7 @@ import { Loading } from "../../../components/utils/Loading";
 import { cart } from "../../../utils/types";
 import { GlobalCartContext } from "../../../lib/context";
 import { toast } from "react-toastify";
+import { AuthEmployee } from "../../../utils/authEmployee";
 
 export default function RestaurantEmployee(){
     const router = useRouter();
@@ -22,8 +23,12 @@ export default function RestaurantEmployee(){
     const [categories, setCategories] = useState(null);
 
     const { setCart } = GlobalCartContext();
-
+    const {push} = useRouter();
     useEffect(()=>{
+        let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "employee")
+                push("/");
         if(router.query.id !== undefined){
             MyQuery({
                 variables:{

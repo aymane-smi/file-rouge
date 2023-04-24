@@ -10,6 +10,7 @@ import { Loading } from "../../components/utils/Loading";
 import { toast } from "react-toastify";
 import { orderType } from "../../utils/types";
 import { OrderDetails } from "../../components/restaurant/OrderDetails";
+import { useRouter } from "next/router";
 
 export default function Order(){
     const [user, setUser] = useState(null);
@@ -24,8 +25,13 @@ export default function Order(){
     const [add, setAdd] = useState<boolean>(false);
     const [detail, setDeatil] = useState<number>(0);
     const [ticket, setTicket] = useState<boolean>(false);
+    const {push} = useRouter();
 
     useEffect(()=>{
+        let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "restaurant")
+                push("/");
         setUser(JSON.parse(localStorage.getItem("user")));
     },[]);
 

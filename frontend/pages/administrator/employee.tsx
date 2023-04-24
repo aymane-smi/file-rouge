@@ -10,6 +10,7 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import { employeeByClass, getAllEmployees } from "../../utils/gql";
 import { Loading } from "../../components/utils/Loading";
 import { AddEmployee } from "../../components/administrator/AddEmployee";
+import { useRouter } from "next/router";
 export default function Restaurant(){
     const {loading, error, data} = useQuery(getAllEmployees);
     const [Query, {data: d, loading: l}] = useLazyQuery(employeeByClass);
@@ -20,6 +21,14 @@ export default function Restaurant(){
     const toggle = ()=>{
         setAdd(!toggleAdd);
     }
+    const {push}= useRouter();
+
+    useEffect(()=>{
+        let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "administrator")
+                push("/");
+    }, []);
     useEffect(()=>{
         setEmployees(data?.getAllEmployee)
     }, [data]);

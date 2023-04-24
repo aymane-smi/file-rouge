@@ -363,3 +363,13 @@ query MyQuery {
   OrderByRestaurant(restaurant_id: 1)
 }
 `;
+
+
+export const getClaims = gql`query MyQuery {
+    getClaims {
+      description
+      first_name
+      image
+      last_name
+    }
+  }`;

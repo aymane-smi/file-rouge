@@ -15,13 +15,20 @@ import { EditMenu } from "../../components/restaurant/EditMenu";
 import { toast } from "react-toastify";
 import { ShowDetails } from "../../components/restaurant/ShowDetails";
 import SideBar from "../../components/restaurant/sideBar";
+import { AuthRestaurant } from "../../utils/authRestaurant";
+import { useRouter } from "next/router";
 
 export default function Index(){
         const [GetRestaurantById, {data, loading, error}] = useLazyQuery(getRestaurantMenus);
         const [MyMutation, {data:d, loading:l, error:e}] = useMutation(deleteMenu);
         const [editStatus, {data: dd, loading: ll, error: ee}] = useMutation(changeStatus);
         const {data: ddd, loading: lll} = useQuery(RestaurantOrders);
+        const {push} = useRouter();
         useEffect(()=>{
+            let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "restaurant")
+                push("/");
             GetRestaurantById({
                 variables: {
                     id: parseInt(JSON.parse(localStorage.getItem("user")).id),

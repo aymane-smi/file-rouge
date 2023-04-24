@@ -70,6 +70,13 @@ export default function Cart({id}){
             })
     };
 
+    const remove = (e)=>{
+        setCart((old)=>old.filter((item)=>{
+            console.log(item.id != e.target.value);
+            return item.id != e.target.value;
+        }));
+    }
+
     return (
         <div className={`${open ? "" : "hidden"} absolute w-[400px] h-fit max-h-[400px] rounded-md shadow-md bg-white p-5 overflow-y-scroll `}>
             <p className="text-[20px] font-bold">My orders</p>
@@ -77,14 +84,14 @@ export default function Cart({id}){
                 <div className="mt-3 flex justify-between items-center" key={"cart-"+i}>
                     <img className="w-[60px] h-[60px] rounded-md" src={"http://localhost:9003/storage/menu/"+item.image}/>
                     <div className="flex flex-col text-[13px] font-bold justify-center items-center gap-2">
-                        <p className="text-[16px]">{item.name}({item.portion})#{item.id}#{item.detail_id}</p>
+                        <p className="text-[16px]">{item.name}({item.portion})</p>
                         <div className="flex gap-3">
                             <span className="border h-[20px] w-[20px] text-center leading-[20px] rounded-md" onClick={()=>down(item.id, item.detail_id)}>-</span>
                             <span>{item.quantity}</span>
                             <span className="border h-[20px] w-[20px] text-center leading-[20px] rounded-md" onClick={()=>up(item.id, item.detail_id)}>+</span>
                         </div>
                     </div>
-                    <button className="text-white bg-red-500 rounded-md p-1 text-[13px]">remove</button>
+                    <button className="text-white bg-red-500 rounded-md p-1 text-[13px]" value={item.id} onClick={remove}>remove</button>
                 </div>
             ))}
             <div className="w-full flex justify-center items-center">

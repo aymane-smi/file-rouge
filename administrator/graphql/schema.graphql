@@ -11,12 +11,20 @@ type AdminInfo {
     token: String!
 }
 
+type Claims {
+    first_name: String!
+    last_name: String!
+    description: String!
+    image: String
+}
+
 #making queries
 
 type Query {
     getAdministratorById(id: ID! @eq): Administrator @find
     AdminLogin(email: String!, password: String!): AdminInfo!
     countAdministrator: Int! @count(model: "App\\Models\\administrator")
+    getClaims: [Claims]! @all(model: "App\\Models\\complaints")
 }
 
 #making mutations

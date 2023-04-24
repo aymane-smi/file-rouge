@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { ResOrder, countAdmin } from "../../utils/gql";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 ChartJS.register(ArcElement, Tooltip, Legend);
 export default function Index(){
     const {data: d, loading} = useQuery(countAdmin);
@@ -17,7 +18,13 @@ export default function Index(){
     const [names, setNames] = useState<string[]>([]);
     const [colors, setColors] = useState<string[]>([]);
     const [borders, setBorders] = useState<string[]>([]);
-
+    const {push} = useRouter();
+    useEffect(()=>{
+        let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "administrator")
+                push("/");
+    }, []);
     useEffect(()=>{
         if(dd !== undefined){
             setNames([]);

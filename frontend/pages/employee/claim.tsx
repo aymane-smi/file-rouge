@@ -5,18 +5,26 @@ import { AiFillBell, AiOutlineDown } from "react-icons/ai";
 import { BsFillImageFill } from "react-icons/bs";
 import { useMutation } from "@apollo/client";
 import { claim as type } from "../../utils/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addComplain as gql} from "../../utils/gql";
 import { Loading } from "../../components/utils/Loading";
 import axios from "axios";
 import { classicNameResolver } from "typescript";
-export default function claim(){
+import { AuthEmployee } from "../../utils/authEmployee";
+import { useRouter } from "next/router";
+export default function Claim(){
     const [Mutation, {loading, data, error}] = useMutation(gql);
     const [claim, setClaim] = useState<type>({
         description: "",
         image: null,
     });
-
+    const {push} = useRouter();
+    useEffect(()=>{
+        let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "employee")
+                push("/");
+    }, []);
     const handleInput = async(e)=>{
         if(!e.target.files)
             setClaim((old)=>({...old, [e.target.name]: e.target.value}));

@@ -6,13 +6,18 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { Loading } from "../../components/utils/Loading";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 export default function Edit(){
     const [edit, {loading, data}] = useMutation(editAdministrator);
     const [restuarnt, setRestaurant] = useState(null);
     const [user, setUser] = useState(null);
-
+    const {push} = useRouter();
     useEffect(()=>{
+        let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "administrator")
+                push("/");
         const {last_name, email, first_name, id} = JSON.parse(localStorage.getItem("user"));
         console.log(id);
         setUser(({

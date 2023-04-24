@@ -1,16 +1,7 @@
 import { ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource } from "@apollo/gateway";
 import { ApolloServer } from "apollo-server";
 import FileUploadDataSource from '@profusion/apollo-federation-upload';
-class test extends RemoteGraphQLDataSource{
-  async willSendRequest({req, context}){
-    console.log(context.headers);
-    console.log(req);
-  }
-}
 const gateway = new ApolloGateway({
-  buildService: ({ url, name, requestContext }) => {
-    return new test({url});
-  },
   supergraphSdl: new IntrospectAndCompose({
     subgraphs: [
       { name: "employee", url: "http://localhost:9000/graphql" },
@@ -24,7 +15,9 @@ const gateway = new ApolloGateway({
 const server = new ApolloServer({
     gateway,
     subscriptions: false,
-    context: ({ req }) => ({ req }),
+    context: ({ req }) => {
+      return { req }
+    },
 });
 // start the gateway server
 server.listen().then(({ url }) => {

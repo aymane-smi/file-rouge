@@ -10,6 +10,7 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import { bill, employeeByClass, getAllEmployees, getAllRestaurants } from "../../utils/gql";
 import { Loading } from "../../components/utils/Loading";
 import { AddEmployee } from "../../components/administrator/AddEmployee";
+import { useRouter } from "next/router";
 export default function Bill(){
     const [month, setMonth] = useState<number>(0);
     const [year, setYear] = useState<number>(0);
@@ -18,7 +19,14 @@ export default function Bill(){
     const [Query, {loading, data}] = useLazyQuery(bill);
     const {data: d, loading: l} = useQuery(getAllRestaurants);
     const [total, setTotal] = useState<number>(0);
+    const {push} = useRouter();
 
+    useEffect(()=>{
+        let token = localStorage.getItem("token");
+            let role = localStorage.getItem("role");
+            if(!token || role != "administrator")
+                push("/");
+    }, []);
     useEffect(()=>{
         if(year !== 0 && id !== 0 && month !== 0){
             Query({
@@ -29,7 +37,6 @@ export default function Bill(){
                 }
             })
         }
-
     }, [month, year, id]);
 
     useEffect(()=>{
